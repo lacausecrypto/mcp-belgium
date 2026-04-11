@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/irail",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Belgian Railways iRail public APIs",
   "type": "module",

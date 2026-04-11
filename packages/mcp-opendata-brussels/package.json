@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/opendata-brussels",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Brussels Region open data APIs",
   "type": "module",

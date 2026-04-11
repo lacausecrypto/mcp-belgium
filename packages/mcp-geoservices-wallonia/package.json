@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/geoservices-wallonia",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Wallonia GeoServices public ArcGIS REST APIs",
   "type": "module",

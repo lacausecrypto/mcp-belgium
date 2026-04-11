@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/infrabel",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Infrabel public open data APIs",
   "type": "module",

@@ -161,7 +161,7 @@ docker compose up --build
 - `packages/mcp-belgium`: public aggregated entry point
 - `packages/mcp-*`: domain-specific packages kept modular for maintenance, testing, and isolated validation
 
-The public consumer path is `mcp-belgium`. Internal packages are published separately under the `@lacausecrypto/*` scope because the aggregated server depends on them.
+The public consumer path is `mcp-belgium`. Internal workspace packages stay modular for development, but the published `mcp-belgium` package bundles them so end users install only one npm package.
 
 ## Upstream caveats
 

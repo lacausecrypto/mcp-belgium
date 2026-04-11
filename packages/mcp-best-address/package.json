@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/best-address",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing the Belgian BeST addresses and streets API",
   "type": "module",

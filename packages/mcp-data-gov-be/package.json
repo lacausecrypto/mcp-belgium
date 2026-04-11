@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/data-gov-be",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Belgium federal CKAN open data APIs",
   "type": "module",

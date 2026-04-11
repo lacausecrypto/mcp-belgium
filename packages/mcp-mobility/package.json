@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/mobility",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Belgian mobility open data APIs",
   "type": "module",

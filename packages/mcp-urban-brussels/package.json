@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/urban-brussels",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing urban.brussels public WFS geospatial APIs",
   "type": "module",

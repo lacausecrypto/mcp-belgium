@@ -10,15 +10,19 @@ mcp-belgium
 
 ## Internal packages
 
-The aggregated package depends on internal published packages under the `@lacausecrypto/*` scope.
+The public npm package is only:
 
-That means a release normally publishes the full workspace, not only the top-level package.
+```bash
+mcp-belgium
+```
+
+Internal `@lacausecrypto/*` packages are workspace-only and are bundled into the published artifact.
 
 ## Publish
 
 ```bash
 npm login
-pnpm -r publish --access public --no-git-checks
+pnpm --filter mcp-belgium publish --access public --no-git-checks
 ```
 
 ## Recommended release checks

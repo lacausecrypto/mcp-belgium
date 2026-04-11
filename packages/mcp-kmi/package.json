@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/kmi",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing Royal Meteorological Institute of Belgium open geospatial APIs",
   "type": "module",

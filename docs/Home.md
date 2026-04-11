@@ -18,7 +18,7 @@ It is designed so that:
 
 - end users install only `mcp-belgium`
 - the LLM can self-discover the right Belgian domain through built-in catalog tools and resources
-- internal packages stay modular for maintenance, testing, and publishing
+- internal packages stay modular for maintenance and testing, while the published package remains a single npm install
 
 ## Quick start
 

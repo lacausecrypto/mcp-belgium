@@ -1,5 +1,6 @@
 {
   "name": "@lacausecrypto/air-quality",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server exposing IRCELINE Belgian air quality public APIs",
   "type": "module",
