@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { errorResult, jsonResult } from "@belgium-gov-mcp/core";
+import { errorResult, jsonResult } from "@lacausecrypto/core";
 import { describeDomain, DOMAIN_IDS } from "../catalog.js";
 
 export function registerBelgiumDescribeDomainTool(server: McpServer): void {

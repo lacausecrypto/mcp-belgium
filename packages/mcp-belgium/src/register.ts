@@ -1,21 +1,21 @@
 import { ResourceTemplate, type McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { registerAll as registerAirQuality } from "@belgium-gov-mcp/air-quality/register";
-import { registerAll as registerBestAddress } from "@belgium-gov-mcp/best-address/register";
-import { registerAll as registerDataGovBe } from "@belgium-gov-mcp/data-gov-be/register";
-import { registerAll as registerGeoservicesWallonia } from "@belgium-gov-mcp/geoservices-wallonia/register";
-import { registerAll as registerInfrabel } from "@belgium-gov-mcp/infrabel/register";
-import { registerAll as registerIrail } from "@belgium-gov-mcp/irail/register";
-import { registerAll as registerKbo } from "@belgium-gov-mcp/kbo/register";
-import { registerAll as registerKmi } from "@belgium-gov-mcp/kmi/register";
-import { registerAll as registerMobility } from "@belgium-gov-mcp/mobility/register";
-import { registerAll as registerBrussels } from "@belgium-gov-mcp/opendata-brussels/register";
-import { registerAll as registerFlanders } from "@belgium-gov-mcp/opendata-flanders/register";
-import { registerAll as registerWallonia } from "@belgium-gov-mcp/opendata-wallonia/register";
-import { registerAll as registerStatbel } from "@belgium-gov-mcp/statbel/register";
-import { registerAll as registerStib } from "@belgium-gov-mcp/stib/register";
-import { registerAll as registerUrbanBrussels } from "@belgium-gov-mcp/urban-brussels/register";
-import { registerAll as registerUrbis } from "@belgium-gov-mcp/urbis/register";
+import { registerAll as registerAirQuality } from "@lacausecrypto/air-quality/register";
+import { registerAll as registerBestAddress } from "@lacausecrypto/best-address/register";
+import { registerAll as registerDataGovBe } from "@lacausecrypto/data-gov-be/register";
+import { registerAll as registerGeoservicesWallonia } from "@lacausecrypto/geoservices-wallonia/register";
+import { registerAll as registerInfrabel } from "@lacausecrypto/infrabel/register";
+import { registerAll as registerIrail } from "@lacausecrypto/irail/register";
+import { registerAll as registerKbo } from "@lacausecrypto/kbo/register";
+import { registerAll as registerKmi } from "@lacausecrypto/kmi/register";
+import { registerAll as registerMobility } from "@lacausecrypto/mobility/register";
+import { registerAll as registerBrussels } from "@lacausecrypto/opendata-brussels/register";
+import { registerAll as registerFlanders } from "@lacausecrypto/opendata-flanders/register";
+import { registerAll as registerWallonia } from "@lacausecrypto/opendata-wallonia/register";
+import { registerAll as registerStatbel } from "@lacausecrypto/statbel/register";
+import { registerAll as registerStib } from "@lacausecrypto/stib/register";
+import { registerAll as registerUrbanBrussels } from "@lacausecrypto/urban-brussels/register";
+import { registerAll as registerUrbis } from "@lacausecrypto/urbis/register";
 import {
   BELGIUM_CATALOG_PROMPT,
   describeDomain,

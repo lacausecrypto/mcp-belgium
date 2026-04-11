@@ -1,4 +1,4 @@
-import { apiFetch, CACHE_TTL, InMemoryCache, optionalEnv } from "@belgium-gov-mcp/core";
+import { apiFetch, CACHE_TTL, InMemoryCache, optionalEnv } from "@lacausecrypto/core";
 import type { StibRecord, StibRecordsResponse } from "./types.js";
 
 const BASE = "https://data.stib-mivb.brussels/api/v2";

@@ -1,4 +1,4 @@
-import { apiFetch, TokenBucket, InMemoryCache, CACHE_TTL } from "@belgium-gov-mcp/core";
+import { apiFetch, TokenBucket, InMemoryCache, CACHE_TTL } from "@lacausecrypto/core";
 import type {
   Connection,
   ConnectionsResponse,

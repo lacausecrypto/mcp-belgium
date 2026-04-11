@@ -1,4 +1,4 @@
-import { apiFetch } from "@belgium-gov-mcp/core";
+import { apiFetch } from "@lacausecrypto/core";
 import type { MobilityFeed, MobilityOperator, MobilityTripPlan } from "./types.js";
 
 const BASE = "https://opendata-portal.api.production.belgianmobility.io";

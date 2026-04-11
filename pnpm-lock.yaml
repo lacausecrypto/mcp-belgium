@@ -39,7 +39,7 @@ importers:
 
   packages/mcp-air-quality:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -67,55 +67,55 @@ importers:
 
   packages/mcp-belgium:
     dependencies:
-      '@belgium-gov-mcp/air-quality':
+      '@lacausecrypto/air-quality':
         specifier: workspace:*
         version: link:../mcp-air-quality
-      '@belgium-gov-mcp/best-address':
+      '@lacausecrypto/best-address':
         specifier: workspace:*
         version: link:../mcp-best-address
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
-      '@belgium-gov-mcp/data-gov-be':
+      '@lacausecrypto/data-gov-be':
         specifier: workspace:*
         version: link:../mcp-data-gov-be
-      '@belgium-gov-mcp/geoservices-wallonia':
+      '@lacausecrypto/geoservices-wallonia':
         specifier: workspace:*
         version: link:../mcp-geoservices-wallonia
-      '@belgium-gov-mcp/infrabel':
+      '@lacausecrypto/infrabel':
         specifier: workspace:*
         version: link:../mcp-infrabel
-      '@belgium-gov-mcp/irail':
+      '@lacausecrypto/irail':
         specifier: workspace:*
         version: link:../mcp-irail
-      '@belgium-gov-mcp/kbo':
+      '@lacausecrypto/kbo':
         specifier: workspace:*
         version: link:../mcp-kbo
-      '@belgium-gov-mcp/kmi':
+      '@lacausecrypto/kmi':
         specifier: workspace:*
         version: link:../mcp-kmi
-      '@belgium-gov-mcp/mobility':
+      '@lacausecrypto/mobility':
         specifier: workspace:*
         version: link:../mcp-mobility
-      '@belgium-gov-mcp/opendata-brussels':
+      '@lacausecrypto/opendata-brussels':
         specifier: workspace:*
         version: link:../mcp-opendata-brussels
-      '@belgium-gov-mcp/opendata-flanders':
+      '@lacausecrypto/opendata-flanders':
         specifier: workspace:*
         version: link:../mcp-opendata-flanders
-      '@belgium-gov-mcp/opendata-wallonia':
+      '@lacausecrypto/opendata-wallonia':
         specifier: workspace:*
         version: link:../mcp-opendata-wallonia
-      '@belgium-gov-mcp/statbel':
+      '@lacausecrypto/statbel':
         specifier: workspace:*
         version: link:../mcp-statbel
-      '@belgium-gov-mcp/stib':
+      '@lacausecrypto/stib':
         specifier: workspace:*
         version: link:../mcp-stib
-      '@belgium-gov-mcp/urban-brussels':
+      '@lacausecrypto/urban-brussels':
         specifier: workspace:*
         version: link:../mcp-urban-brussels
-      '@belgium-gov-mcp/urbis':
+      '@lacausecrypto/urbis':
         specifier: workspace:*
         version: link:../mcp-urbis
       '@modelcontextprotocol/sdk':
@@ -143,7 +143,7 @@ importers:
 
   packages/mcp-best-address:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -171,7 +171,7 @@ importers:
 
   packages/mcp-data-gov-be:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -199,7 +199,7 @@ importers:
 
   packages/mcp-geoservices-wallonia:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -227,7 +227,7 @@ importers:
 
   packages/mcp-infrabel:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -255,7 +255,7 @@ importers:
 
   packages/mcp-irail:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -283,7 +283,7 @@ importers:
 
   packages/mcp-kbo:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -311,7 +311,7 @@ importers:
 
   packages/mcp-kmi:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -339,7 +339,7 @@ importers:
 
   packages/mcp-mobility:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -367,7 +367,7 @@ importers:
 
   packages/mcp-opendata-brussels:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -395,7 +395,7 @@ importers:
 
   packages/mcp-opendata-flanders:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -423,7 +423,7 @@ importers:
 
   packages/mcp-opendata-wallonia:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -451,7 +451,7 @@ importers:
 
   packages/mcp-statbel:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -479,7 +479,7 @@ importers:
 
   packages/mcp-stib:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -507,7 +507,7 @@ importers:
 
   packages/mcp-urban-brussels:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':
@@ -535,7 +535,7 @@ importers:
 
   packages/mcp-urbis:
     dependencies:
-      '@belgium-gov-mcp/core':
+      '@lacausecrypto/core':
         specifier: workspace:*
         version: link:../core
       '@modelcontextprotocol/sdk':

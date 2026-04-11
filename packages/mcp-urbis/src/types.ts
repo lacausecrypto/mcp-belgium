@@ -1,4 +1,4 @@
-import type { WmsLayerSummary } from "@belgium-gov-mcp/core";
+import type { WmsLayerSummary } from "@lacausecrypto/core";
 
 export type UrbisServiceKind = "vector" | "raster";
 

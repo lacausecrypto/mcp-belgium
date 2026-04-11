@@ -1,4 +1,4 @@
-import { apiFetchText, CACHE_TTL, InMemoryCache, parseWmsLayers } from "@belgium-gov-mcp/core";
+import { apiFetchText, CACHE_TTL, InMemoryCache, parseWmsLayers } from "@lacausecrypto/core";
 import type { UrbisLayer, UrbisMapRequest, UrbisServiceKind } from "./types.js";
 
 const VECTOR_BASE = "https://geoservices-urbis.irisnet.be/geoserver/Urbis/wms";

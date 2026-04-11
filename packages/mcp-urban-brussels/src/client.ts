@@ -5,7 +5,7 @@ import {
   InMemoryCache,
   parseWfsFeatureTypes,
   parseXsdElements,
-} from "@belgium-gov-mcp/core";
+} from "@lacausecrypto/core";
 import type { FeatureTypeDescription, GeoJsonFeatureCollection, UrbanFeatureType } from "./types.js";
 
 const BASE = "https://gis.urban.brussels/geoserver/wfs";

@@ -1,4 +1,4 @@
-import { apiFetch } from "@belgium-gov-mcp/core";
+import { apiFetch } from "@lacausecrypto/core";
 import type {
   AirQualityDataPoint,
   AirQualityDataResponse,

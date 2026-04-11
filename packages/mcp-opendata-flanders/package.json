@@ -1,5 +1,5 @@
 {
-  "name": "@belgium-gov-mcp/opendata-flanders",
+  "name": "@lacausecrypto/opendata-flanders",
   "version": "0.1.0",
   "description": "MCP server exposing Flanders open data APIs",
   "type": "module",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@belgium-gov-mcp/core": "workspace:*",
+    "@lacausecrypto/core": "workspace:*",
     "express": "^5.1.0",
     "zod": "^3.25.0"
   },

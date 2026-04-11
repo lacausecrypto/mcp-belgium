@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { errorResult, jsonResult } from "@belgium-gov-mcp/core";
+import { errorResult, jsonResult } from "@lacausecrypto/core";
 import { stibClient } from "../client.js";
 
 export function registerGetMessagesTool(server: McpServer): void {

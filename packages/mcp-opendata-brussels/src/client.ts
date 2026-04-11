@@ -1,4 +1,4 @@
-import { apiFetch, CACHE_TTL, InMemoryCache } from "@belgium-gov-mcp/core";
+import { apiFetch, CACHE_TTL, InMemoryCache } from "@lacausecrypto/core";
 import type {
   BrusselsDataset,
   BrusselsDatasetListResponse,

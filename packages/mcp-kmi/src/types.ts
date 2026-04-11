@@ -1,4 +1,4 @@
-import type { WfsFeatureTypeSummary, XsdElementSummary } from "@belgium-gov-mcp/core";
+import type { WfsFeatureTypeSummary, XsdElementSummary } from "@lacausecrypto/core";
 
 export interface GeoJsonFeatureCollection {
   type: "FeatureCollection";

@@ -54,7 +54,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "irail",
     title: "iRail Belgian Rail",
-    packageName: "@belgium-gov-mcp/irail",
+    packageName: "@lacausecrypto/irail",
     category: "transport",
     upstream: "https://api.irail.be",
     auth: "none",
@@ -84,7 +84,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "mobility",
     title: "Belgian Mobility / SMOP",
-    packageName: "@belgium-gov-mcp/mobility",
+    packageName: "@lacausecrypto/mobility",
     category: "transport",
     upstream: "https://opendata-portal.api.production.belgianmobility.io",
     auth: "none",
@@ -109,7 +109,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "stib",
     title: "STIB-MIVB Brussels Transit",
-    packageName: "@belgium-gov-mcp/stib",
+    packageName: "@lacausecrypto/stib",
     category: "transport",
     upstream: "https://data.stib-mivb.brussels/api/v2",
     auth: "required-key",
@@ -140,7 +140,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "infrabel",
     title: "Infrabel Open Data",
-    packageName: "@belgium-gov-mcp/infrabel",
+    packageName: "@lacausecrypto/infrabel",
     category: "transport",
     upstream: "https://opendata.infrabel.be/api/explore/v2.1",
     auth: "none",
@@ -162,7 +162,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "kbo",
     title: "KBO / BCE Company Registry",
-    packageName: "@belgium-gov-mcp/kbo",
+    packageName: "@lacausecrypto/kbo",
     category: "business",
     upstream: "https://cbeapi.be",
     auth: "required-key",
@@ -187,7 +187,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "best-address",
     title: "BeST Belgian Addresses",
-    packageName: "@belgium-gov-mcp/best-address",
+    packageName: "@lacausecrypto/best-address",
     category: "administration",
     upstream: "https://best.pr.fedservices.be/api/opendata/best/v1",
     auth: "none",
@@ -217,7 +217,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "statbel",
     title: "Statbel Statistics",
-    packageName: "@belgium-gov-mcp/statbel",
+    packageName: "@lacausecrypto/statbel",
     category: "statistics",
     upstream: "https://bestat.statbel.fgov.be/bestat/api/views",
     auth: "none",
@@ -245,7 +245,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "air-quality",
     title: "IRCELINE Air Quality",
-    packageName: "@belgium-gov-mcp/air-quality",
+    packageName: "@lacausecrypto/air-quality",
     category: "environment",
     upstream: "https://geo.irceline.be/sos/api/v1",
     auth: "none",
@@ -273,7 +273,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "data-gov-be",
     title: "data.gov.be Federal Open Data",
-    packageName: "@belgium-gov-mcp/data-gov-be",
+    packageName: "@lacausecrypto/data-gov-be",
     category: "open-data",
     upstream: "https://data.gov.be",
     auth: "none",
@@ -303,7 +303,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "brussels",
     title: "Brussels Region Open Data",
-    packageName: "@belgium-gov-mcp/brussels",
+    packageName: "@lacausecrypto/opendata-brussels",
     category: "open-data",
     upstream: "https://opendata.brussels.be/api/explore/v2.1",
     auth: "none",
@@ -325,7 +325,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "flanders",
     title: "Flanders Datavindplaats",
-    packageName: "@belgium-gov-mcp/flanders",
+    packageName: "@lacausecrypto/opendata-flanders",
     category: "open-data",
     upstream: "https://www.vlaanderen.be/datavindplaats",
     auth: "required-key",
@@ -349,7 +349,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "wallonia",
     title: "Wallonia Open Data",
-    packageName: "@belgium-gov-mcp/wallonia",
+    packageName: "@lacausecrypto/opendata-wallonia",
     category: "open-data",
     upstream: "https://www.odwb.be/api/explore/v2.1",
     auth: "none",
@@ -371,7 +371,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "kmi",
     title: "KMI / IRM Weather GeoServer",
-    packageName: "@belgium-gov-mcp/kmi",
+    packageName: "@lacausecrypto/kmi",
     category: "environment",
     upstream: "https://opendata.meteo.be/geoserver/ows",
     auth: "none",
@@ -401,7 +401,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "geoservices-wallonia",
     title: "Wallonia GeoServices ArcGIS REST",
-    packageName: "@belgium-gov-mcp/geoservices-wallonia",
+    packageName: "@lacausecrypto/geoservices-wallonia",
     category: "geospatial",
     upstream: "https://geoservices.wallonie.be/arcgis/rest/services",
     auth: "none",
@@ -429,7 +429,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "urban-brussels",
     title: "urban.brussels WFS",
-    packageName: "@belgium-gov-mcp/urban-brussels",
+    packageName: "@lacausecrypto/urban-brussels",
     category: "geospatial",
     upstream: "https://gis.urban.brussels/geoserver/wfs",
     auth: "none",
@@ -457,7 +457,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   {
     id: "urbis",
     title: "URBIS Public WMS",
-    packageName: "@belgium-gov-mcp/urbis",
+    packageName: "@lacausecrypto/urbis",
     category: "geospatial",
     upstream: "https://geoservices-urbis.irisnet.be/geoserver/Urbis/wms",
     auth: "none",
@@ -598,8 +598,8 @@ export function getCatalogOverview() {
 
   return {
     server: {
-      name: "belgium-gov-mcp-belgium",
-      packageName: "@belgium-gov-mcp/belgium",
+      name: "mcp-belgium",
+      packageName: "mcp-belgium",
       recommendedConfigName: "belgium",
     },
     counts: {

@@ -1,9 +1,34 @@
 {
-  "name": "@belgium-gov-mcp/belgium",
+  "name": "mcp-belgium",
   "version": "0.1.0",
   "description": "Single aggregated MCP server exposing Belgian public data, transport, statistics, and geospatial domains",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lacausecrypto/mcp-belgium.git",
+    "directory": "packages/mcp-belgium"
+  },
+  "homepage": "https://github.com/lacausecrypto/mcp-belgium#readme",
+  "bugs": {
+    "url": "https://github.com/lacausecrypto/mcp-belgium/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "belgium",
+    "open-data",
+    "transport",
+    "geospatial",
+    "statbel",
+    "irail"
+  ],
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "mcp-belgium": "./dist/index.js"
   },
@@ -28,23 +53,23 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@belgium-gov-mcp/air-quality": "workspace:*",
-    "@belgium-gov-mcp/best-address": "workspace:*",
-    "@belgium-gov-mcp/core": "workspace:*",
-    "@belgium-gov-mcp/data-gov-be": "workspace:*",
-    "@belgium-gov-mcp/geoservices-wallonia": "workspace:*",
-    "@belgium-gov-mcp/infrabel": "workspace:*",
-    "@belgium-gov-mcp/irail": "workspace:*",
-    "@belgium-gov-mcp/kbo": "workspace:*",
-    "@belgium-gov-mcp/kmi": "workspace:*",
-    "@belgium-gov-mcp/mobility": "workspace:*",
-    "@belgium-gov-mcp/opendata-brussels": "workspace:*",
-    "@belgium-gov-mcp/opendata-flanders": "workspace:*",
-    "@belgium-gov-mcp/opendata-wallonia": "workspace:*",
-    "@belgium-gov-mcp/statbel": "workspace:*",
-    "@belgium-gov-mcp/stib": "workspace:*",
-    "@belgium-gov-mcp/urban-brussels": "workspace:*",
-    "@belgium-gov-mcp/urbis": "workspace:*",
+    "@lacausecrypto/air-quality": "workspace:*",
+    "@lacausecrypto/best-address": "workspace:*",
+    "@lacausecrypto/core": "workspace:*",
+    "@lacausecrypto/data-gov-be": "workspace:*",
+    "@lacausecrypto/geoservices-wallonia": "workspace:*",
+    "@lacausecrypto/infrabel": "workspace:*",
+    "@lacausecrypto/irail": "workspace:*",
+    "@lacausecrypto/kbo": "workspace:*",
+    "@lacausecrypto/kmi": "workspace:*",
+    "@lacausecrypto/mobility": "workspace:*",
+    "@lacausecrypto/opendata-brussels": "workspace:*",
+    "@lacausecrypto/opendata-flanders": "workspace:*",
+    "@lacausecrypto/opendata-wallonia": "workspace:*",
+    "@lacausecrypto/statbel": "workspace:*",
+    "@lacausecrypto/stib": "workspace:*",
+    "@lacausecrypto/urban-brussels": "workspace:*",
+    "@lacausecrypto/urbis": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "express": "^5.1.0",
     "zod": "^3.25.0"

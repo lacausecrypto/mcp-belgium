@@ -1,4 +1,4 @@
-import { apiFetch, CACHE_TTL, InMemoryCache, TokenBucket } from "@belgium-gov-mcp/core";
+import { apiFetch, CACHE_TTL, InMemoryCache, TokenBucket } from "@lacausecrypto/core";
 import type { KboEnterprise, KboSearchResponse } from "./types.js";
 
 const BASE = "https://cbeapi.be/api";

@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { errorResult, jsonResult } from "@belgium-gov-mcp/core";
+import { errorResult, jsonResult } from "@lacausecrypto/core";
 import { irailClient } from "../client.js";
 
 export function registerGetDisturbancesTool(server: McpServer): void {

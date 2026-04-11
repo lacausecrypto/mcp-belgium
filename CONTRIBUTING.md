@@ -26,14 +26,14 @@ pnpm run typecheck
 
 The main consumer-facing package is:
 
-- `@belgium-gov-mcp/belgium`
+- `mcp-belgium`
 
 Documentation changes should treat that package as the default install path unless a change is specifically about local development or one domain package.
 
 ## Contribution Rules
 
 - Keep tool names stable once published
-- Route all upstream HTTP through `@belgium-gov-mcp/core`
+- Route all upstream HTTP through `@lacausecrypto/core`
 - Use `.js` extensions in local ESM imports
 - Add or update tests when changing shared behavior or a server contract
 - Prefer explicit upstream limitation messages over silent failures when an API changes
@@ -41,7 +41,7 @@ Documentation changes should treat that package as the default install path unle
 
 ## Documentation Expectations
 
-- Prefer `npx -y @belgium-gov-mcp/belgium` or `pnpm dlx @belgium-gov-mcp/belgium` in public-facing examples
+- Prefer `npx -y mcp-belgium` or `pnpm dlx mcp-belgium` in public-facing examples
 - Do not commit machine-specific paths in public docs
 - When changing domain status, update the aggregated catalog and the README domain table together
 

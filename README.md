@@ -1,51 +1,50 @@
-# belgium-gov-mcp
+# mcp-belgium
 
-[![npm version](https://img.shields.io/npm/v/%40belgium-gov-mcp%2Fbelgium?style=flat-square&logo=npm)](https://www.npmjs.com/package/@belgium-gov-mcp/belgium)
-[![npm downloads](https://img.shields.io/npm/dt/%40belgium-gov-mcp%2Fbelgium?style=flat-square&logo=npm)](https://www.npmjs.com/package/@belgium-gov-mcp/belgium)
-[![license](https://img.shields.io/badge/license-MIT-16a34a?style=flat-square)](./LICENSE)
+[![npm version](https://img.shields.io/npm/v/mcp-belgium?style=flat-square&logo=npm)](https://www.npmjs.com/package/mcp-belgium)
+[![npm downloads](https://img.shields.io/npm/dt/mcp-belgium?style=flat-square&logo=npm)](https://www.npmjs.com/package/mcp-belgium)
+[![CI](https://img.shields.io/github/actions/workflow/status/lacausecrypto/mcp-belgium/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/lacausecrypto/mcp-belgium/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/lacausecrypto/mcp-belgium?style=flat-square)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D22-43853d?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9-F69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![typescript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![vitest](https://img.shields.io/badge/tests-vitest-729b1b?style=flat-square)](https://vitest.dev/)
 [![mcp](https://img.shields.io/badge/MCP-stdio%20%2B%20Streamable%20HTTP-111827?style=flat-square)](https://modelcontextprotocol.io/)
 
-Single-package MCP access to Belgian public data.
+One MCP server for Belgian public APIs.
 
-`@belgium-gov-mcp/belgium` is the recommended published package. It exposes one aggregated MCP server that bundles Belgian transport, statistics, open data, address, weather, air-quality, and geospatial domains behind a single configuration entry.
+`mcp-belgium` is the public entry point. It exposes a single aggregated MCP server that bundles Belgian transport, official statistics, open data, addresses, weather, air quality, and geospatial services behind one install and one client config entry.
 
-## Why This Exists
+## Why use it
 
-Most Belgian public data MCP integrations end up as a long list of separate servers in the client config. This project removes that friction:
+- one npm package
+- one MCP server entry in your client config
+- namespaced tools like `irail_*`, `statbel_*`, `best_*`, `kmi_*`, `urban_*`, and `urbis_*`
+- built-in catalog tools, resources, and a prompt so the LLM can discover the right Belgian domain before calling tools
+- explicit limitation surfaces when an upstream requires a key or has changed contract
 
-- one published npm package
-- one MCP server entry in the client config
-- namespaced tools such as `irail_*`, `statbel_*`, `best_*`, `urban_*`, or `urbis_*`
-- built-in catalog tools, resources, and a prompt so the LLM can discover the right domain before calling tools
+## Install
 
-## Install From npm
-
-Run directly without cloning:
+Run directly:
 
 ```bash
-npx -y @belgium-gov-mcp/belgium
+npx -y mcp-belgium
 ```
 
 With pnpm:
 
 ```bash
-pnpm dlx @belgium-gov-mcp/belgium
+pnpm dlx mcp-belgium
 ```
 
-Install globally if you want a stable local binary:
+Global install:
 
 ```bash
-pnpm add -g @belgium-gov-mcp/belgium
+pnpm add -g mcp-belgium
 mcp-belgium
 ```
 
-By default the server starts in `stdio` mode, which is what MCP desktop clients expect.
+Default transport is `stdio`, which is what desktop MCP clients expect.
 
-## Claude Desktop Example
+## Claude Desktop
 
 ```json
 {
@@ -54,7 +53,7 @@ By default the server starts in `stdio` mode, which is what MCP desktop clients 
       "command": "npx",
       "args": [
         "-y",
-        "@belgium-gov-mcp/belgium"
+        "mcp-belgium"
       ],
       "env": {
         "LOG_LEVEL": "silent"
@@ -64,77 +63,65 @@ By default the server starts in `stdio` mode, which is what MCP desktop clients 
 }
 ```
 
-Optional environment variables:
+Optional env vars:
 
 - `STIB_API_KEY`: enables live STIB/MIVB tools
 - `CBEAPI_KEY`: enables live KBO/BCE company registry tools
-- `MCP_TRANSPORT=http`: runs the server over Streamable HTTP instead of stdio
+- `MCP_TRANSPORT=http`: runs the server over Streamable HTTP
 - `PORT_BELGIUM=3017`: sets the HTTP port for the aggregated server
 
-## What The LLM Gets
+## What the LLM gets
 
-The aggregated server exposes the normal domain tools and an internal discovery layer:
+Alongside the domain tools, `mcp-belgium` exposes a discovery layer:
 
-- Tool: `belgium_catalog_overview`
-- Tool: `belgium_list_domains`
-- Tool: `belgium_describe_domain`
-- Resource: `belgium://catalog`
-- Resource: `belgium://catalog.json`
-- Resource template: `belgium://domain/{domain}`
-- Prompt: `belgium_capability_guide`
+- `belgium_catalog_overview`
+- `belgium_list_domains`
+- `belgium_describe_domain`
+- `belgium://catalog`
+- `belgium://catalog.json`
+- `belgium://domain/{domain}`
+- `belgium_capability_guide`
 
-This lets the LLM:
+That means the LLM can:
 
-- inspect available Belgian domains
-- understand which tools belong to which domain
-- see whether a domain is live, limited, or requires an API key
+- inspect the Belgian domains available from this single MCP
+- see which domains are live, limited, or key-gated
+- understand what kind of data each domain provides
 - pick the right namespaced tool without guessing
 
-## Example Tool Families
-
-- `irail_get_connections`: passenger rail trip planning
-- `irail_get_liveboard`: live departures and arrivals
-- `mobility_plan_trip`: intermodal Belgian public transport planning
-- `statbel_get_population`: official Belgian population data
-- `best_search_addresses`: official Belgian address search
-- `airquality_get_belaqi`: nearest BelAQI lookup
-- `brussels_search_datasets`: Brussels open data search
-- `wallonia_get_records`: Wallonia dataset records
-- `kmi_get_hourly_observations`: weather observations from KMI/IRM
-- `urban_get_features`: urban.brussels WFS feature retrieval
-- `urbis_build_map_url`: public URBIS WMS map URL generation
-
-## Domain Coverage
+## Main domains
 
 | Prefix | Domain | Status | Auth | Main data |
 | --- | --- | --- | --- | --- |
-| `irail_*` | Belgian rail / iRail | Live | None | stations, connections, liveboards, vehicles, disturbances |
+| `irail_*` | Belgian rail / iRail | Live | None | stations, connections, liveboards, vehicles, disruptions |
 | `mobility_*` | Belgian mobility / SMOP | Live | None | intermodal trip planning, operators, GTFS references |
-| `stib_*` | STIB/MIVB Brussels transit | Live | API key | stops, waiting times, routes, service messages |
+| `stib_*` | STIB/MIVB Brussels transit | Live | API key | waiting times, stops, routes, service messages |
 | `infrabel_*` | Infrabel Open Data | Live | None | rail infrastructure datasets and records |
 | `kbo_*` | Belgian company registry | Live | API key | enterprise search and company details |
 | `best_*` | BeST Belgian addresses | Live | None | addresses, municipalities, streets, postal infos |
 | `statbel_*` | Statbel | Live | None | population, CPI, employment, dataset search |
-| `airquality_*` | IRCELINE air quality | Live | None | stations, current measurements, BelAQI, timeseries |
+| `airquality_*` | IRCELINE air quality | Live | None | stations, live measurements, BelAQI, timeseries |
 | `brussels_*` | Brussels Region open data | Live | None | datasets and records |
 | `wallonia_*` | Wallonia open data | Live | None | datasets and records |
 | `kmi_*` | KMI / IRM GeoServer | Live | None | stations, hourly observations, WFS discovery |
 | `wallonia_geo_*` | Wallonia GeoServices | Live | None | ArcGIS folders, services, layer queries |
-| `urban_*` | urban.brussels WFS | Live | None | WFS feature types, schemas, GeoJSON features |
+| `urban_*` | urban.brussels WFS | Live | None | feature types, schemas, GeoJSON features |
 | `urbis_*` | URBIS public WMS | Live | None | WMS layer discovery and map URL generation |
 | `datagov_*` | data.gov.be compatibility layer | Limited | None | explicit upstream-changed error surface |
 | `flanders_*` | Datavindplaats compatibility layer | Limited | API key | explicit upstream limitation surface |
 
-## Recommended User Path
+## Docs / Wiki
 
-For most users and most clients, use only:
+The repo now includes a `docs/` tree that works as a lightweight public wiki:
 
-- npm package: `@belgium-gov-mcp/belgium`
-- MCP config entry name: `belgium`
+- [Docs home](./docs/Home.md)
+- [Installation](./docs/installation.md)
+- [Client configuration](./docs/client-config.md)
+- [Domain catalog](./docs/domains.md)
+- [Development](./docs/development.md)
+- [Release and npm publishing](./docs/release.md)
 
-You do not need to configure 10 to 15 separate Belgian MCP servers unless you intentionally want split deployments.
-
-## Local Development
+## Local development
 
 Requirements:
 
@@ -150,31 +137,33 @@ pnpm run test
 pnpm run typecheck
 ```
 
-Run the aggregated server locally over stdio:
+Run the aggregated server over stdio:
 
 ```bash
-pnpm --filter @belgium-gov-mcp/belgium start:stdio
+pnpm --filter mcp-belgium start:stdio
 ```
 
 Run it over Streamable HTTP:
 
 ```bash
-MCP_TRANSPORT=http PORT_BELGIUM=3017 pnpm --filter @belgium-gov-mcp/belgium start
+MCP_TRANSPORT=http PORT_BELGIUM=3017 pnpm --filter mcp-belgium start
 ```
 
-Run all packages in Docker:
+Run the whole workspace:
 
 ```bash
 docker compose up --build
 ```
 
-## Monorepo Structure
+## Monorepo shape
 
 - `packages/core`: shared HTTP, retry, cache, rate limiting, XML helpers, and MCP response helpers
-- `packages/mcp-belgium`: single aggregated public entry point
-- `packages/mcp-*`: domain-specific servers kept modular for testing and maintenance
+- `packages/mcp-belgium`: public aggregated entry point
+- `packages/mcp-*`: domain-specific packages kept modular for maintenance, testing, and isolated validation
 
-## Open Data Caveats
+The public consumer path is `mcp-belgium`. Internal packages are published separately under the `@lacausecrypto/*` scope because the aggregated server depends on them.
+
+## Upstream caveats
 
 This project wraps public upstream APIs. Some Belgian portals change authentication or endpoint contracts over time. When an upstream is no longer publicly compatible, this project prefers explicit, machine-readable limitation errors over silent failure.
 
@@ -182,12 +171,12 @@ Current examples:
 
 - `mcp-stib` requires `STIB_API_KEY`
 - `mcp-kbo` requires `CBEAPI_KEY`
-- `mcp-data-gov-be` keeps the older contract surface but returns an explicit upstream-changed error
-- `mcp-opendata-flanders` keeps the older contract surface but returns an explicit API-key limitation
+- `mcp-data-gov-be` preserves the old tool contract but returns an explicit upstream-changed error
+- `mcp-opendata-flanders` preserves the old tool contract but returns an explicit API-key limitation
 
-## Validation Status
+## Validation
 
-The monorepo is validated with:
+Current workspace checks:
 
 - `pnpm run build`
 - `pnpm run test`

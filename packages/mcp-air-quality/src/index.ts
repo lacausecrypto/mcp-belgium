@@ -4,7 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createLogger, getPort } from "@belgium-gov-mcp/core";
+import { createLogger, getPort } from "@lacausecrypto/core";
 import { registerAll } from "./register.js";
 
 const logger = createLogger("mcp-air-quality");
@@ -13,7 +13,7 @@ const transport = process.env.MCP_TRANSPORT ?? "stdio";
 function createServer(): McpServer {
   const server = new McpServer(
     {
-      name: "belgium-gov-mcp-air-quality",
+      name: "mcp-air-quality",
       version: "0.1.0",
     },
     {

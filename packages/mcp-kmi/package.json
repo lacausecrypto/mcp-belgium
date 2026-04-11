@@ -1,5 +1,5 @@
 {
-  "name": "@belgium-gov-mcp/kmi",
+  "name": "@lacausecrypto/kmi",
   "version": "0.1.0",
   "description": "MCP server exposing Royal Meteorological Institute of Belgium open geospatial APIs",
   "type": "module",
@@ -28,7 +28,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@belgium-gov-mcp/core": "workspace:*",
+    "@lacausecrypto/core": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "express": "^5.1.0",
     "zod": "^3.25.0"
