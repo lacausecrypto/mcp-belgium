@@ -1,0 +1,192 @@
+version: "3.9"
+
+services:
+  mcp-belgium:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-belgium
+    ports: ["3017:3017"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_BELGIUM: 3017
+      STIB_API_KEY: ${STIB_API_KEY:-}
+      CBEAPI_KEY: ${CBEAPI_KEY:-}
+
+  mcp-irail:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-irail
+    ports: ["3001:3001"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_IRAIL: 3001
+
+  mcp-kbo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-kbo
+    ports: ["3002:3002"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_KBO: 3002
+
+  mcp-data-gov-be:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-data-gov-be
+    ports: ["3003:3003"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_DATA_GOV_BE: 3003
+
+  mcp-stib:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-stib
+    ports: ["3004:3004"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_STIB: 3004
+      STIB_API_KEY: ${STIB_API_KEY:-}
+
+  mcp-air-quality:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-air-quality
+    ports: ["3005:3005"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_AIR_QUALITY: 3005
+
+  mcp-statbel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-statbel
+    ports: ["3006:3006"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_STATBEL: 3006
+
+  mcp-opendata-brussels:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-opendata-brussels
+    ports: ["3007:3007"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_OPENDATA_BXL: 3007
+
+  mcp-opendata-flanders:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-opendata-flanders
+    ports: ["3008:3008"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_OPENDATA_VL: 3008
+
+  mcp-opendata-wallonia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-opendata-wallonia
+    ports: ["3009:3009"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_OPENDATA_WAL: 3009
+
+  mcp-mobility:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-mobility
+    ports: ["3010:3010"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_MOBILITY: 3010
+
+  mcp-infrabel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-infrabel
+    ports: ["3011:3011"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_INFRABEL: 3011
+
+  mcp-best-address:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-best-address
+    ports: ["3012:3012"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_BEST_ADDRESS: 3012
+
+  mcp-kmi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-kmi
+    ports: ["3013:3013"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_KMI: 3013
+
+  mcp-geoservices-wallonia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-geoservices-wallonia
+    ports: ["3014:3014"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_GEOSERVICES_WAL: 3014
+
+  mcp-urban-brussels:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-urban-brussels
+    ports: ["3015:3015"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_URBAN_BXL: 3015
+
+  mcp-urbis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PACKAGE: mcp-urbis
+    ports: ["3016:3016"]
+    environment:
+      MCP_TRANSPORT: http
+      PORT_URBIS: 3016

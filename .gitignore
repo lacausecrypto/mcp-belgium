@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.turbo/
+.env
+*.tsbuildinfo
+coverage/
+.DS_Store
+pnpm-debug.log*
+skillgen/
