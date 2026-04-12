@@ -2,17 +2,17 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.lacausecrypto/mcp-belgium",
   "title": "mcp-belgium",
-  "description": "Single aggregated MCP server exposing Belgian public transport, statistics, open data, addresses, weather, air quality, and geospatial services.",
+  "description": "Single MCP server for Belgian public transport, statistics, open data, and geospatial services.",
   "repository": {
     "url": "https://github.com/lacausecrypto/mcp-belgium",
     "source": "github"
   },
-  "version": "1.0.2",
+  "version": "1.0.3",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "mcp-belgium",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "transport": {
         "type": "stdio"
       },

@@ -40,9 +40,9 @@ pnpm run build
 pnpm run test
 pnpm run typecheck
 pnpm --filter mcp-belgium publish --access public --no-git-checks
-git tag v1.0.2
+git tag v1.0.3
 git push origin main
-git push origin v1.0.2
+git push origin v1.0.3
 ```
 
 The tag push publishes metadata to the MCP Registry through GitHub OIDC. npm publication stays manual by design.

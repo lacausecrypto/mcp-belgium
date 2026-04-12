@@ -1,6 +1,6 @@
 {
   "name": "mcp-belgium",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "mcpName": "io.github.lacausecrypto/mcp-belgium",
   "description": "Single aggregated MCP server exposing Belgian public data, transport, statistics, and geospatial domains",
   "type": "module",
