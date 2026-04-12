@@ -1,8 +1,7 @@
 # mcp-belgium
 
 [![npm version](https://img.shields.io/npm/v/mcp-belgium?style=flat&logo=npm)](https://www.npmjs.com/package/mcp-belgium)
-[![npm downloads]([https://img.shields.io/npm/dt/mcp-belgium?style=flat&logo=npm](https://img.shields.io/npm/dt/mcp-belgium?style=flat&logo=npm&cacheSeconds=3600
-)](https://www.npmjs.com/package/mcp-belgium)
+[![npm downloads](https://img.shields.io/npm/dt/mcp-belgium?style=flat&logo=npm)](https://www.npmjs.com/package/mcp-belgium)
 [![CI](https://img.shields.io/github/actions/workflow/status/lacausecrypto/mcp-belgium/ci.yml?branch=main&style=flat&label=ci)](https://github.com/lacausecrypto/mcp-belgium/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/lacausecrypto/mcp-belgium?style=flat)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D22-43853d?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
