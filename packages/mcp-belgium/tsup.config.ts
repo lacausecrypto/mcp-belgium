@@ -1,4 +1,10 @@
+import { createRequire } from "node:module";
 import { defineConfig } from "tsup";
+
+const require = createRequire(import.meta.url);
+const typescriptVersion = require("typescript/package.json").version as string;
+const typescriptMajor = Number.parseInt(typescriptVersion.split(".")[0] ?? "0", 10);
+const dtsCompilerOptions = typescriptMajor >= 6 ? { ignoreDeprecations: "6.0" } : undefined;
 
 export default defineConfig({
   entry: ["src/index.ts", "src/register.ts"],
@@ -9,11 +15,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  dts: {
-    compilerOptions: {
-      ignoreDeprecations: "6.0",
-    },
-  },
+  dts: dtsCompilerOptions ? { compilerOptions: dtsCompilerOptions } : true,
   shims: false,
   noExternal: [/^@lacausecrypto\//],
   external: ["@modelcontextprotocol/sdk", "express", "pino", "pino-pretty", "zod"],
