@@ -13,6 +13,8 @@ Single MCP server for Belgian public APIs.
 
 `mcp-belgium` aggregates Belgian transport, statistics, open data, address, air quality, weather, and geospatial tools behind one install and one MCP client entry.
 
+The package is also prepared for publication to the official MCP Registry under `io.github.lacausecrypto/mcp-belgium`.
+
 ## Install
 
 ```bash

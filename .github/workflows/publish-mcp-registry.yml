@@ -1,0 +1,68 @@
+name: Publish to MCP Registry
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish-mcp-registry:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate version alignment
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PACKAGE_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('packages/mcp-belgium/package.json', 'utf8')).version")"
+          SERVER_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('packages/mcp-belgium/server.json', 'utf8')).version")"
+          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ] || [ "$TAG_VERSION" != "$SERVER_VERSION" ]; then
+            echo "Tag version ($TAG_VERSION), package version ($PACKAGE_VERSION), and server.json version ($SERVER_VERSION) must match."
+            exit 1
+          fi
+
+      - name: Verify npm package version is published
+        run: |
+          PACKAGE_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('packages/mcp-belgium/package.json', 'utf8')).version")"
+          PUBLISHED_VERSION="$(npm view mcp-belgium version)"
+          if [ "$PUBLISHED_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "mcp-belgium@$PACKAGE_VERSION must already be published to npm before pushing the tag."
+            echo "Latest npm version is: $PUBLISHED_VERSION"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Build package
+        run: pnpm run build
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Authenticate to MCP Registry
+        working-directory: packages/mcp-belgium
+        run: ../../mcp-publisher login github-oidc
+
+      - name: Publish server to MCP Registry
+        working-directory: packages/mcp-belgium
+        run: ../../mcp-publisher publish

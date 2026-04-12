@@ -1,6 +1,7 @@
 {
   "name": "mcp-belgium",
-  "version": "0.1.1",
+  "version": "1.0.1",
+  "mcpName": "io.github.lacausecrypto/mcp-belgium",
   "description": "Single aggregated MCP server exposing Belgian public data, transport, statistics, and geospatial domains",
   "type": "module",
   "license": "MIT",
@@ -24,7 +25,8 @@
     "irail"
   ],
   "files": [
-    "dist"
+    "dist",
+    "server.json"
   ],
   "publishConfig": {
     "access": "public"

@@ -13,6 +13,8 @@ One MCP server for Belgian public APIs.
 
 `mcp-belgium` is the public entry point. It exposes a single aggregated MCP server that bundles Belgian transport, official statistics, open data, addresses, weather, air quality, and geospatial services behind one install and one client config entry.
 
+The package is also prepared for publication to the official MCP Registry under `io.github.lacausecrypto/mcp-belgium`.
+
 ## Why use it
 
 - one npm package

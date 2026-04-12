@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.lacausecrypto/mcp-belgium",
+  "title": "mcp-belgium",
+  "description": "Single aggregated MCP server exposing Belgian public transport, statistics, open data, addresses, weather, air quality, and geospatial services.",
+  "repository": {
+    "url": "https://github.com/lacausecrypto/mcp-belgium",
+    "source": "github"
+  },
+  "version": "1.0.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "mcp-belgium",
+      "version": "1.0.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "STIB_API_KEY",
+          "description": "Optional STIB/MIVB API key to enable live Brussels public transport tools.",
+          "format": "string",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "CBEAPI_KEY",
+          "description": "Optional CBEAPI key to enable live KBO/BCE Belgian company registry tools.",
+          "format": "string",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
