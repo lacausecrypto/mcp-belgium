@@ -7,12 +7,12 @@
     "url": "https://github.com/lacausecrypto/mcp-belgium",
     "source": "github"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "mcp-belgium",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "transport": {
         "type": "stdio"
       },

@@ -18,7 +18,7 @@ export const DOMAIN_IDS = [
 ] as const;
 
 export type BelgiumDomainId = (typeof DOMAIN_IDS)[number];
-export type BelgiumDomainStatus = "live" | "requires-key" | "limited";
+export type BelgiumDomainStatus = "live" | "requires-key" | "limited" | "deprecated";
 export type BelgiumDomainAuth = "none" | "required-key";
 
 export interface BelgiumDomainCatalog {
@@ -277,17 +277,13 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     category: "open-data",
     upstream: "https://data.gov.be",
     auth: "none",
-    status: "limited",
-    summary: "Federal open data portal compatibility layer for the historic CKAN API surface from the original spec.",
+    status: "deprecated",
+    summary: "DEPRECATED. data.gov.be closed the CKAN /api/3/action endpoints this domain used; calling any datagov_* tool will return an upstream-unavailable error.",
     dataAvailable: [
-      "catalog search shape from the original CKAN design",
-      "dataset metadata shape",
-      "organization listing shape",
-      "resource metadata shape",
+      "none at runtime: the upstream CKAN surface was retired",
     ],
     llmUseCases: [
-      "Explaining why the old data.gov.be CKAN contract no longer works",
-      "Keeping compatibility in one aggregated server",
+      "Do not route user requests here. If the user asks for federal Belgian open data, explain the deprecation and point them to RSS/linked-data access on data.gov.be or to Eurostat/Statbel alternatives.",
     ],
     toolNames: [
       "datagov_search_datasets",
@@ -296,8 +292,10 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
       "datagov_get_resource",
     ],
     notes: [
-      "Current tools intentionally return a clear upstream-changed error.",
-      "The public portal no longer exposes the CKAN /api/3/action endpoints expected by the original spec.",
+      "Deprecated. Upstream CKAN /api/3/action endpoints no longer exist.",
+      "All tools intentionally return a clear upstream-unavailable error.",
+      "Hidden from belgium_list_domains by default. Pass includeDeprecated=true to inspect it.",
+      "Scheduled for removal in a future major release.",
     ],
   },
   {
@@ -329,21 +327,20 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     category: "open-data",
     upstream: "https://www.vlaanderen.be/datavindplaats",
     auth: "required-key",
-    status: "limited",
-    summary: "Compatibility layer for the older public Flemish CKAN pattern described in the original spec.",
+    status: "deprecated",
+    summary: "DEPRECATED. Datavindplaats retired the public CKAN endpoints and now requires an API key; calling any flanders_* tool will return an upstream-unavailable error.",
     dataAvailable: [
-      "dataset search shape",
-      "dataset detail shape",
-      "organization listing shape",
+      "none at runtime: the public CKAN surface was retired",
     ],
     llmUseCases: [
-      "Explaining the current Flemish API key requirement",
-      "Preserving one consolidated interface for the workspace",
+      "Do not route user requests here. For Flemish open data, point the user to https://www.vlaanderen.be/datavindplaats/api-authenticatie to obtain a key, or use neighboring domains (statbel, best-address, irail, mobility).",
     ],
     toolNames: ["flanders_search_datasets", "flanders_get_dataset", "flanders_list_organizations"],
     notes: [
-      "Current tools intentionally return a clear upstream limitation.",
-      "Datavindplaats now requires an API key and no longer matches the public CKAN contract from the original spec.",
+      "Deprecated. Datavindplaats now requires an API key and no longer exposes the public CKAN contract.",
+      "All tools intentionally return a clear upstream-unavailable error.",
+      "Hidden from belgium_list_domains by default. Pass includeDeprecated=true to inspect it.",
+      "Scheduled for removal in a future major release.",
     ],
   },
   {
@@ -543,10 +540,19 @@ export function listDomainCatalog(options?: {
   query?: string;
   onlyPublicNoKey?: boolean;
   includeTools?: boolean;
+  includeDeprecated?: boolean;
 }) {
-  const { query, onlyPublicNoKey = false, includeTools = true } = options ?? {};
+  const {
+    query,
+    onlyPublicNoKey = false,
+    includeTools = true,
+    includeDeprecated = false,
+  } = options ?? {};
 
   const filtered = DOMAIN_CATALOG.filter((domain) => {
+    if (!includeDeprecated && domain.status === "deprecated") {
+      return false;
+    }
     if (onlyPublicNoKey && (domain.status !== "live" || domain.auth !== "none")) {
       return false;
     }
@@ -556,17 +562,20 @@ export function listDomainCatalog(options?: {
   return {
     query: query ?? null,
     onlyPublicNoKey,
+    includeDeprecated,
     count: filtered.length,
     domains: filtered.map((domain) => domainSnapshot(domain, includeTools)),
   };
 }
 
 export function suggestDomainsForTask(task?: string, limit = 5): BelgiumDomainCatalog[] {
+  const pool = DOMAIN_CATALOG.filter((domain) => domain.status !== "deprecated");
+
   if (!task?.trim()) {
-    return DOMAIN_CATALOG.slice(0, limit);
+    return pool.slice(0, limit);
   }
 
-  return [...DOMAIN_CATALOG]
+  return pool
     .map((domain) => ({ domain, score: scoreDomain(domain, task) }))
     .filter((item) => item.score > 0)
     .sort((left, right) => right.score - left.score)
@@ -579,6 +588,7 @@ export function getCatalogOverview() {
     live: DOMAIN_CATALOG.filter((domain) => domain.status === "live").map((domain) => domain.id),
     requiresKey: DOMAIN_CATALOG.filter((domain) => domain.status === "requires-key").map((domain) => domain.id),
     limited: DOMAIN_CATALOG.filter((domain) => domain.status === "limited").map((domain) => domain.id),
+    deprecated: DOMAIN_CATALOG.filter((domain) => domain.status === "deprecated").map((domain) => domain.id),
   };
 
   const domainsByCategory = Object.fromEntries(
@@ -663,8 +673,13 @@ export function describeDomain(domainId: BelgiumDomainId) {
 }
 
 function renderDomainMarkdown(domain: BelgiumDomainCatalog): string {
+  const header =
+    domain.status === "deprecated"
+      ? `## ⚠ DEPRECATED — ${domain.title} (\`${domain.id}\`)`
+      : `## ${domain.title} (\`${domain.id}\`)`;
+
   return [
-    `## ${domain.title} (\`${domain.id}\`)`,
+    header,
     ``,
     `- Package: \`${domain.packageName}\``,
     `- Category: \`${domain.category}\``,
@@ -681,10 +696,24 @@ function renderDomainMarkdown(domain: BelgiumDomainCatalog): string {
 
 export function renderCatalogMarkdown(): string {
   const overview = getCatalogOverview();
-  const intro = [
+  const deprecatedIds = overview.domainsByStatus.deprecated;
+
+  const sections: string[] = [
     "# Belgium MCP Catalog",
     "",
     `This single MCP server exposes ${overview.counts.domainTools} domain tools across ${overview.counts.domains} Belgian data domains, plus ${overview.counts.catalogTools} catalog tools for orientation.`,
+  ];
+
+  if (deprecatedIds.length > 0) {
+    sections.push(
+      "",
+      `> Deprecated domains (hidden from \`belgium_list_domains\` by default): ${deprecatedIds
+        .map((id) => `\`${id}\``)
+        .join(", ")}. Their tools still exist for backward compatibility but return an upstream-unavailable error when called.`
+    );
+  }
+
+  sections.push(
     "",
     "## How To Navigate",
     "",
@@ -694,10 +723,10 @@ export function renderCatalogMarkdown(): string {
     "- Use `belgium_describe_domain` when you need exact tool names, caveats, and data coverage for one domain.",
     "- Read `belgium://catalog.json` when a structured machine-readable inventory is easier than prose.",
     "",
-    "## Domain Sheets",
-  ].join("\n");
+    "## Domain Sheets"
+  );
 
-  return `${intro}\n\n${DOMAIN_CATALOG.map(renderDomainMarkdown).join("\n\n")}\n`;
+  return `${sections.join("\n")}\n\n${DOMAIN_CATALOG.map(renderDomainMarkdown).join("\n\n")}\n`;
 }
 
 export function renderDomainResource(domainId: BelgiumDomainId): string {

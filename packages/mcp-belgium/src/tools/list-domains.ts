@@ -6,7 +6,7 @@ import { listDomainCatalog } from "../catalog.js";
 export function registerBelgiumListDomainsTool(server: McpServer): void {
   server.tool(
     "belgium_list_domains",
-    "List the Belgian domains aggregated by this server, optionally filtered by topic or restricted to domains that are live and require no API key.",
+    "List the Belgian domains aggregated by this server, optionally filtered by topic or restricted to domains that are live and require no API key. Deprecated domains (whose upstream API has been retired) are hidden by default.",
     {
       query: z
         .string()
@@ -20,10 +20,14 @@ export function registerBelgiumListDomainsTool(server: McpServer): void {
         .boolean()
         .default(true)
         .describe("If true, include the exact tool names exposed by each returned domain"),
+      includeDeprecated: z
+        .boolean()
+        .default(false)
+        .describe("If true, also include domains whose upstream API has been retired and whose tools only return an upstream-unavailable error"),
     },
-    async ({ query, onlyPublicNoKey, includeTools }) => {
+    async ({ query, onlyPublicNoKey, includeTools, includeDeprecated }) => {
       try {
-        return jsonResult(listDomainCatalog({ query, onlyPublicNoKey, includeTools }));
+        return jsonResult(listDomainCatalog({ query, onlyPublicNoKey, includeTools, includeDeprecated }));
       } catch (e) {
         return errorResult(`Belgium domain listing failed: ${e instanceof Error ? e.message : String(e)}`);
       }

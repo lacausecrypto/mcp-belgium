@@ -10,8 +10,8 @@ function normalizeRecords(data: StibRecordsResponse): StibRecord[] {
   return [];
 }
 
-function escapeOdsString(value: string): string {
-  return value.replace(/"/g, '\\"');
+export function escapeOdsString(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
 function getHeaders(): Record<string, string> {

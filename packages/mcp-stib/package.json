@@ -1,7 +1,7 @@
 {
   "name": "@lacausecrypto/stib",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing Brussels STIB/MIVB public transport APIs",
   "type": "module",
   "license": "MIT",

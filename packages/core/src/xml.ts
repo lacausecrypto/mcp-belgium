@@ -33,7 +33,10 @@ function decodeXmlEntities(value: string): string {
 
 function extractXmlBlocks(xml: string, tagName: string): string[] {
   const blocks: string[] = [];
-  const tokenPattern = new RegExp(`<\\/?${tagName}\\b[^>]*>`, "g");
+  // Safe: tagName is escapeRegex-sanitized. eslint-plugin-security cannot
+  // prove that statically, hence the targeted disable.
+  // eslint-disable-next-line security/detect-non-literal-regexp
+  const tokenPattern = new RegExp(`<\\/?${escapeRegex(tagName)}\\b[^>]*>`, "g");
   const stack: number[] = [];
 
   for (const match of xml.matchAll(tokenPattern)) {
@@ -62,6 +65,8 @@ function escapeRegex(value: string): string {
 
 function extractFirstTagText(xml: string, localNames: string[]): string | undefined {
   for (const localName of localNames) {
+    // Safe: localName passes through escapeRegex.
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const pattern = new RegExp(`<(?:[A-Za-z0-9_-]+:)?${escapeRegex(localName)}\\b[^>]*>([\\s\\S]*?)<\\/(?:[A-Za-z0-9_-]+:)?${escapeRegex(localName)}>`);
     const match = xml.match(pattern);
     if (match?.[1]) {
@@ -75,6 +80,8 @@ function extractAllTagTexts(xml: string, localNames: string[]): string[] {
   const values: string[] = [];
 
   for (const localName of localNames) {
+    // Safe: localName passes through escapeRegex.
+    // eslint-disable-next-line security/detect-non-literal-regexp
     const pattern = new RegExp(
       `<(?:[A-Za-z0-9_-]+:)?${escapeRegex(localName)}\\b[^>]*>([\\s\\S]*?)<\\/(?:[A-Za-z0-9_-]+:)?${escapeRegex(localName)}>`,
       "g"
@@ -137,6 +144,8 @@ export function parseXsdElements(xml: string): XsdElementSummary[] {
 export function parseWmsLayers(xml: string): WmsLayerSummary[] {
   return extractXmlBlocks(xml, "Layer")
     .map((block): WmsLayerSummary | null => {
+      // Linear quantifier on a bounded character class, no nested repetition → not actually ReDoS-prone.
+      // eslint-disable-next-line security/detect-unsafe-regex
       const firstNameIndex = block.search(/<(?:[A-Za-z0-9_-]+:)?Name\b/);
       const nestedLayerIndex = block.search(/<Layer\b/);
       const directBlock = nestedLayerIndex === -1 ? block : block.slice(0, nestedLayerIndex);

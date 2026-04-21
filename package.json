@@ -2,16 +2,23 @@
   "name": "mcp-belgium-workspace",
   "private": true,
   "packageManager": "pnpm@9.15.4",
-  "engines": { "node": ">=22.0.0" },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
-    "lint": "turbo run lint",
+    "lint": "eslint . --max-warnings 0",
+    "lint:packages": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-security": "^4.0.0",
     "turbo": "^2.4.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.59.0"
   }
 }
