@@ -8,7 +8,7 @@ export function registerGetMunicipalitiesBoundariesTool(server: McpServer): void
     "urban_get_municipalities_boundaries",
     "Fetch Brussels municipality boundaries from the urban.brussels public WFS endpoint.",
     {
-      count: z.number().min(1).max(500).default(10).describe("Maximum number of municipality features to return"),
+      count: z.number().int().min(1).max(19).default(19).describe("Number of municipality features to return (Brussels has 19 communes)"),
     },
     async ({ count }) => {
       try {

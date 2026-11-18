@@ -86,7 +86,9 @@ export const urbanBrusselsClient = {
     });
   },
 
-  async getMunicipalitiesBoundaries(count = 10): Promise<GeoJsonFeatureCollection> {
-    return this.getFeatures("URBAN_DCC_ER:municipalities_boundaries", count);
+  async getMunicipalitiesBoundaries(count = 19): Promise<GeoJsonFeatureCollection> {
+    // URBAN_DCC_ER:municipalities_boundaries is still advertised in GetCapabilities but
+    // GetFeature rejects it as unknown; the BruCiel layer carries the same 19 communes.
+    return this.getFeatures("BRUCIEL:Institutionnel_LimitesCommunales", count);
   },
 };

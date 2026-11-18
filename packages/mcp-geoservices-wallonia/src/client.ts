@@ -1,8 +1,22 @@
-import { apiFetch, CACHE_TTL, InMemoryCache } from "@lacausecrypto/core";
+import { apiFetch, CACHE_TTL, InMemoryCache, type FetchOptions } from "@lacausecrypto/core";
 import type { ArcGisLayerQueryResult, ArcGisServiceDetails, ArcGisServiceDirectory } from "./types.js";
 
 const BASE = "https://geoservices.wallonie.be/arcgis/rest/services";
 const cache = new InMemoryCache();
+
+interface ArcGisErrorBody {
+  error?: { code?: number; message?: string; details?: unknown[] };
+}
+
+/** ArcGIS REST reports errors as HTTP 200 with an `error` object in the body. */
+async function arcgisFetch<T>(path: string, opts: FetchOptions): Promise<T> {
+  const data = await apiFetch<T & ArcGisErrorBody>("wallonia-geo", BASE, path, opts);
+  if (data.error) {
+    const details = Array.isArray(data.error.details) && data.error.details.length > 0 ? ` (${data.error.details.join("; ")})` : "";
+    throw new Error(`ArcGIS error ${data.error.code ?? "?"} on ${path || "/"}: ${data.error.message ?? "unknown error"}${details}`);
+  }
+  return data;
+}
 
 function normalizeServicePath(servicePath: string): string {
   const trimmed = servicePath.replace(/^\/+|\/+$/g, "");
@@ -21,7 +35,7 @@ export const walloniaGeoClient = {
     const cached = await cache.get<string[]>("folders");
     if (cached) return cached;
 
-    const data = await apiFetch<ArcGisServiceDirectory>("wallonia-geo", BASE, "", {
+    const data = await arcgisFetch<ArcGisServiceDirectory>("", {
       params: { f: "pjson" },
     });
     const folders = data.folders ?? [];
@@ -35,7 +49,7 @@ export const walloniaGeoClient = {
     if (cached) return cached;
 
     const path = folder ? `/${encodeURIComponent(folder)}` : "";
-    const data = await apiFetch<ArcGisServiceDirectory>("wallonia-geo", BASE, path, {
+    const data = await arcgisFetch<ArcGisServiceDirectory>(path, {
       params: { f: "pjson" },
     });
 
@@ -50,7 +64,7 @@ export const walloniaGeoClient = {
     const cached = await cache.get<ArcGisServiceDetails>(cacheKey);
     if (cached) return cached;
 
-    const data = await apiFetch<ArcGisServiceDetails>("wallonia-geo", BASE, `/${normalized}`, {
+    const data = await arcgisFetch<ArcGisServiceDetails>(`/${normalized}`, {
       params: { f: "pjson" },
     });
     await cache.set(cacheKey, data, CACHE_TTL.SEMI_STATIC);
@@ -66,7 +80,7 @@ export const walloniaGeoClient = {
     returnGeometry = false
   ): Promise<ArcGisLayerQueryResult> {
     const normalized = encodeServicePath(normalizeServicePath(servicePath));
-    return apiFetch<ArcGisLayerQueryResult>("wallonia-geo", BASE, `/${normalized}/${layerId}/query`, {
+    return arcgisFetch<ArcGisLayerQueryResult>(`/${normalized}/${layerId}/query`, {
       params: {
         where,
         outFields,
