@@ -6,9 +6,9 @@ import { dataGovBeClient } from "../client.js";
 export function registerListOrganizationsTool(server: McpServer): void {
   server.tool(
     "datagov_list_organizations",
-    "List Belgian public organizations publishing federal open data.",
+    "List publishers in the data.gov.be catalogue, ordered by number of datasets. Names can be passed as `organization` to datagov_search_datasets.",
     {
-      limit: z.number().min(1).max(100).default(25).describe("Maximum number of organizations to return"),
+      limit: z.number().int().min(1).max(250).default(25).describe("Maximum number of organizations to return"),
     },
     async ({ limit }) => {
       try {
