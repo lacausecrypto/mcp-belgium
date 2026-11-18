@@ -6,7 +6,7 @@ import { airQualityClient } from "../client.js";
 export function registerGetBelaqiTool(server: McpServer): void {
   server.tool(
     "airquality_get_belaqi",
-    "Get the BelAQI air quality index for a location by using the nearest monitoring station.",
+    "Get the current BelAQI air quality index (1 excellent … 10 horrible) at a Belgian location, from the IRCELINE hourly interpolated map, plus the nearest monitoring station.",
     {
       latitude: z.number().describe("Latitude"),
       longitude: z.number().describe("Longitude"),

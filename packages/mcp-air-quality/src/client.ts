@@ -9,6 +9,43 @@ import type {
 } from "./types.js";
 
 const BASE = "https://geo.irceline.be/sos/api/v1";
+const WMS = "https://geo.irceline.be";
+/** Hourly RIO-IFDM interpolated BelAQI raster (1 = excellent … 10 = horrible). */
+const BELAQI_LAYER = "rioifdm:belaqi";
+const BELAQI_LABELS = [
+  "Excellent",
+  "Very good",
+  "Good",
+  "Fairly good",
+  "Moderate",
+  "Poor",
+  "Very poor",
+  "Bad",
+  "Very bad",
+  "Horrible",
+] as const;
+
+interface WmsFeatureInfo {
+  features: Array<{ properties: Record<string, unknown> }>;
+}
+
+function stationCoordinates(station: AirQualityStation): [number, number] | null {
+  const geometry = station.geometry as { coordinates?: unknown } | undefined;
+  const coords = geometry?.coordinates;
+  if (Array.isArray(coords) && typeof coords[0] === "number" && typeof coords[1] === "number") {
+    return [coords[0], coords[1]];
+  }
+  return null;
+}
+
+/** Haversine distance in km. */
+function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad;
+  const dLon = (lon2 - lon1) * rad;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+  return 6371 * 2 * Math.asin(Math.sqrt(a));
+}
 
 function buildNearParam(latitude: number, longitude: number, radiusMeters: number): string {
   return JSON.stringify({
@@ -24,7 +61,7 @@ function normalizeStations(data: AirQualityStationsResponse | AirQualityStation[
   if (Array.isArray(data)) return data;
   if (Array.isArray(data.stations)) return data.stations;
   if (Array.isArray(data.results)) return data.results;
-  return [];
+  throw new Error("Unexpected IRCELINE stations response shape");
 }
 
 function normalizeTimeseries(data: AirQualityTimeseriesResponse | AirQualityTimeseries[]): AirQualityTimeseries[] {
@@ -42,8 +79,14 @@ function normalizeDataPoints(data: AirQualityDataResponse | AirQualityDataPoint[
   return [];
 }
 
+/** Last point carrying a value: the current hour is often published as null until validated. */
 function latestPoint(points: AirQualityDataPoint[]): AirQualityDataPoint | null {
-  return points.length > 0 ? points[points.length - 1] ?? null : null;
+  for (let i = points.length - 1; i >= 0; i--) {
+    const point = points[i];
+    const value = Array.isArray(point) ? point[1] : point.value;
+    if (value !== null && value !== undefined) return point;
+  }
+  return null;
 }
 
 function getLast24Hours(): { from: string; to: string } {
@@ -55,17 +98,20 @@ function getLast24Hours(): { from: string; to: string } {
   };
 }
 
-function timeseriesLabel(ts: AirQualityTimeseries): string {
-  return JSON.stringify(ts).toLowerCase();
-}
-
 export const airQualityClient = {
   async searchStations(latitude: number, longitude: number, radius = 10000): Promise<AirQualityStation[]> {
     const data = await apiFetch<AirQualityStationsResponse>("air-quality", BASE, "/stations", {
       params: { near: buildNearParam(latitude, longitude, radius) },
     });
 
-    return normalizeStations(data);
+    // The API returns stations alphabetically; callers expect nearest first.
+    return normalizeStations(data)
+      .map((station) => {
+        const coords = stationCoordinates(station);
+        const distance = coords ? distanceKm(latitude, longitude, coords[1], coords[0]) : null;
+        return { ...station, distanceKm: distance === null ? null : Math.round(distance * 100) / 100 };
+      })
+      .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity));
   },
 
   async getStation(stationId: number): Promise<AirQualityStation> {
@@ -125,52 +171,46 @@ export const airQualityClient = {
   },
 
   async getBelaqi(latitude: number, longitude: number): Promise<Record<string, unknown>> {
-    const stations = await this.searchStations(latitude, longitude, 10000);
-    const station = stations[0];
-
-    if (!station) {
-      throw new Error("No nearby air quality station found");
-    }
-
-    const stationId =
-      typeof station.id === "number"
-        ? station.id
-        : typeof station.id === "string"
-          ? parseInt(station.id, 10)
-          : NaN;
-
-    if (Number.isNaN(stationId)) {
-      throw new Error("Nearby station does not expose a numeric station ID");
-    }
-
-    const series = await this.getTimeseriesForStation(stationId);
-    const belaqiSeries = series.find((item) => {
-      const label = timeseriesLabel(item);
-      return label.includes("belaqi") || label.includes("aqi");
+    const d = 0.001;
+    const info = await apiFetch<WmsFeatureInfo>("air-quality", WMS, "/wms", {
+      params: {
+        service: "WMS",
+        version: "1.3.0",
+        request: "GetFeatureInfo",
+        layers: BELAQI_LAYER,
+        query_layers: BELAQI_LAYER,
+        styles: "",
+        crs: "EPSG:4326",
+        bbox: `${latitude - d},${longitude - d},${latitude + d},${longitude + d}`,
+        width: 3,
+        height: 3,
+        i: 1,
+        j: 1,
+        info_format: "application/json",
+      },
     });
 
-    if (!belaqiSeries) {
-      throw new Error("BelAQI timeseries not found for the nearest station");
+    const raw = info.features?.[0]?.properties?.GRAY_INDEX;
+    if (typeof raw !== "number") {
+      throw new Error(`No BelAQI value at ${latitude},${longitude}: the point is probably outside Belgium`);
+    }
+    const index = Math.round(raw);
+    const label = BELAQI_LABELS[index - 1];
+    if (label === undefined) {
+      throw new Error(`IRCELINE returned an out-of-range BelAQI value: ${raw}`);
     }
 
-    const timeseriesId =
-      typeof belaqiSeries.id === "number"
-        ? belaqiSeries.id
-        : typeof belaqiSeries.id === "string"
-          ? parseInt(belaqiSeries.id, 10)
-          : NaN;
-
-    if (Number.isNaN(timeseriesId)) {
-      throw new Error("BelAQI timeseries does not expose a numeric timeseries ID");
-    }
-
-    const { from, to } = getLast24Hours();
-    const points = await this.getTimeseriesData(timeseriesId, from, to);
-
+    const nearest = (await this.searchStations(latitude, longitude, 20000))[0] ?? null;
     return {
-      station,
-      timeseries: belaqiSeries,
-      latest: latestPoint(points),
+      latitude,
+      longitude,
+      belaqi: index,
+      label,
+      scale: "1 (excellent) to 10 (horrible)",
+      source: "IRCELINE RIO-IFDM hourly interpolation (latest hour)",
+      nearestStation: nearest
+        ? { id: (nearest.properties as { id?: unknown } | undefined)?.id ?? null, label: (nearest.properties as { label?: unknown } | undefined)?.label ?? null, distanceKm: nearest.distanceKm }
+        : null,
     };
   },
 };
