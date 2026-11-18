@@ -6,7 +6,7 @@ import { kboClient } from "../client.js";
 export function registerGetEnterpriseTool(server: McpServer): void {
   server.tool(
     "kbo_get_enterprise",
-    "Get full details for a Belgian enterprise by BCE number.",
+    "Get full details for a Belgian enterprise by BCE number. Requires CBEAPI_KEY.",
     {
       enterpriseNumber: z.string().describe("BCE number, e.g. 0123.456.789"),
     },

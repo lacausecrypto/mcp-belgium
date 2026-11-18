@@ -1,11 +1,17 @@
 import { apiFetch, CACHE_TTL, InMemoryCache, TokenBucket } from "@lacausecrypto/core";
-import type { KboEnterprise, KboSearchResponse } from "./types.js";
+import type {
+  KboActivitySearchResult,
+  KboEnterprise,
+  KboPaginatedResponse,
+  KboSearchResponse,
+  NaceVersion,
+} from "./types.js";
 
 const BASE = "https://cbeapi.be/api";
 const limiter = new TokenBucket(1, 2000);
 const cache = new InMemoryCache();
 const CBEAPI_KEY_REQUIRED_MESSAGE =
-  "CBEAPI now requires an API key. Set CBEAPI_KEY or register for the free tier at https://cbeapi.be/en.";
+  'CBEAPI requires an API key (free tier: 2,500 calls/day at https://cbeapi.be). Add it to the "env" block of this server in your MCP client config, e.g. "env": { "CBEAPI_KEY": "<your key>" }, then restart the client.';
 
 function normalizeEnterpriseList(data: KboSearchResponse | KboEnterprise[]): KboEnterprise[] {
   if (Array.isArray(data)) return data;
@@ -13,7 +19,7 @@ function normalizeEnterpriseList(data: KboSearchResponse | KboEnterprise[]): Kbo
   if (Array.isArray(data.enterprise)) return data.enterprise;
   if (Array.isArray(data.results)) return data.results;
   if (Array.isArray(data.data)) return data.data;
-  return [];
+  throw new Error(`Unexpected CBEAPI search response shape (keys: ${Object.keys(data).join(", ") || "none"})`);
 }
 
 function isEnterpriseEnvelope(data: KboEnterprise | { data?: KboEnterprise }): data is { data?: KboEnterprise } {
@@ -42,9 +48,9 @@ function getCbeApiHeaders(): Record<string, string> {
 }
 
 export const kboClient = {
-  async searchEnterprise(query: string, type?: "name" | "number"): Promise<KboEnterprise[]> {
+  async searchEnterprise(query: string, type?: "name" | "number", postCode?: number): Promise<KboEnterprise[]> {
     const normalizedQuery = type === "number" ? normalizeEnterpriseNumber(query) : query;
-    const cacheKey = `search:${type ?? "auto"}:${normalizedQuery}`;
+    const cacheKey = `search:${type ?? "auto"}:${normalizedQuery}:${postCode ?? ""}`;
     const cached = await cache.get<KboEnterprise[]>(cacheKey);
     if (cached) return cached;
 
@@ -56,7 +62,7 @@ export const kboClient = {
     }
 
     const data = await apiFetch<KboSearchResponse>("kbo", BASE, "/v1/company/search", {
-      params: { name: normalizedQuery },
+      params: { name: normalizedQuery, post_code: postCode },
       headers: getCbeApiHeaders(),
       rateLimiter: limiter,
     });
@@ -82,9 +88,33 @@ export const kboClient = {
     return result;
   },
 
-  async searchByActivity(naceCode: string): Promise<KboEnterprise[]> {
-    throw new Error(
-      `CBEAPI does not expose a public company-by-NACE search endpoint in its current documentation. Activity search for ${naceCode} is not supported by this server.`
-    );
+  async searchByActivity(naceCode: string, naceVersion: NaceVersion = "2008", page = 1): Promise<KboActivitySearchResult> {
+    const code = naceCode.replace(/\D/g, "");
+    if (code.length < 2) {
+      throw new Error(`Invalid NACE code "${naceCode}": expected at least 2 digits, e.g. 62 or 62.010`);
+    }
+    const cacheKey = `nace:${naceVersion}:${code}:${page}`;
+    const cached = await cache.get<KboActivitySearchResult>(cacheKey);
+    if (cached) return cached;
+
+    const data = await apiFetch<KboPaginatedResponse>("kbo", BASE, `/v1/nace/${code}/companies`, {
+      params: { nace_version: naceVersion, page },
+      headers: getCbeApiHeaders(),
+      rateLimiter: limiter,
+    });
+    if (!Array.isArray(data.data)) {
+      throw new Error("CBEAPI NACE response did not include a company list");
+    }
+
+    const result: KboActivitySearchResult = {
+      naceCode: code,
+      naceVersion,
+      page: data.meta?.current_page ?? page,
+      lastPage: data.meta?.last_page ?? null,
+      total: data.meta?.total ?? null,
+      companies: data.data,
+    };
+    await cache.set(cacheKey, result, CACHE_TTL.SEMI_STATIC);
+    return result;
   },
 };
