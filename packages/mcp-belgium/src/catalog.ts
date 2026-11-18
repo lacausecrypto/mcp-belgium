@@ -83,13 +83,14 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   },
   {
     id: "mobility",
-    title: "Belgian Mobility / SMOP",
+    title: "Belgian Mobility (Transitous trip planner)",
     packageName: "@lacausecrypto/mobility",
     category: "transport",
-    upstream: "https://opendata-portal.api.production.belgianmobility.io",
+    upstream: "https://api.transitous.org",
     auth: "none",
     status: "live",
-    summary: "Intermodal public transport planning layer spanning multiple Belgian operators.",
+    summary:
+      "Door-to-door public transport planning across SNCB, STIB, De Lijn and TEC via the open-source Transitous (MOTIS) router.",
     dataAvailable: [
       "intermodal trip plans",
       "operator directory",
@@ -102,7 +103,8 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     ],
     toolNames: ["mobility_plan_trip", "mobility_get_operators", "mobility_get_gtfs_feeds"],
     notes: [
-      "Use when the user needs multimodal routing, not only rail.",
+      "Use when the user needs multimodal routing, not only rail. Origins/destinations accept names, addresses or lat,lon.",
+      "Transitous is a community-run service: keep request volume reasonable.",
       "Complements iRail rather than replacing it.",
     ],
   },
@@ -169,19 +171,20 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     status: "requires-key",
     summary: "Belgian enterprise lookup against the current CBEAPI service for KBO/BCE data.",
     dataAvailable: [
-      "enterprise search by name or number",
       "enterprise detail lookup",
-      "limited activity search coverage",
+      "enterprise search by name, BCE number or postal code",
+      "companies by NACE activity code (paginated)",
     ],
     llmUseCases: [
       "Looking up a Belgian company by BCE number",
+      "Listing companies active in a sector (NACE code)",
       "Resolving enterprise names to registry records",
       "Explaining KBO availability and key requirements",
     ],
     toolNames: ["kbo_search_enterprise", "kbo_get_enterprise", "kbo_search_by_activity"],
     notes: [
-      "Requires CBEAPI_KEY on tool calls.",
-      "The activity search tool is registered but currently returns a documented unsupported error because the current upstream does not expose a public company-by-NACE endpoint.",
+      "Requires CBEAPI_KEY (free tier: 2,500 calls/day at https://cbeapi.be), passed through the MCP client config env block.",
+      "kbo_search_by_activity needs the NACE version (2003, 2008 or 2025); 2008 is the default.",
     ],
   },
   {
@@ -236,6 +239,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     ],
     toolNames: [
       "statbel_search_datasets",
+      "statbel_get_view",
       "statbel_get_population",
       "statbel_get_cpi",
       "statbel_get_employment",
@@ -254,7 +258,7 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
     dataAvailable: [
       "nearby monitoring stations",
       "current measurements by station",
-      "BelAQI index from nearest station",
+      "BelAQI index at any point (interpolated hourly map)",
       "historical timeseries data",
     ],
     llmUseCases: [
@@ -272,18 +276,24 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
   },
   {
     id: "data-gov-be",
-    title: "data.gov.be Federal Open Data",
+    title: "data.gov.be Open Data Catalogue",
     packageName: "@lacausecrypto/data-gov-be",
     category: "open-data",
-    upstream: "https://data.gov.be",
+    upstream: "https://data.europa.eu/api/hub/search (catalogue data-gov-be)",
     auth: "none",
-    status: "deprecated",
-    summary: "DEPRECATED. data.gov.be closed the CKAN /api/3/action endpoints this domain used; calling any datagov_* tool will return an upstream-unavailable error.",
+    status: "live",
+    summary:
+      "Search the national data.gov.be catalogue (federal, regional and local publishers such as Statbel, DOV, IWEPS) through its official mirror on the European Data Portal.",
     dataAvailable: [
-      "none at runtime: the upstream CKAN surface was retired",
+      "full-text dataset search with keyword and publisher filters",
+      "dataset metadata with resources (format, license, download URLs)",
+      "publisher list with dataset counts",
+      "single resource (distribution) lookup",
     ],
     llmUseCases: [
-      "Do not route user requests here. If the user asks for federal Belgian open data, explain the deprecation and point them to RSS/linked-data access on data.gov.be or to Eurostat/Statbel alternatives.",
+      "Finding Belgian open datasets across all government levels",
+      "Getting download links and licenses for a dataset",
+      "Discovering which administrations publish open data",
     ],
     toolNames: [
       "datagov_search_datasets",
@@ -292,10 +302,8 @@ export const DOMAIN_CATALOG: readonly BelgiumDomainCatalog[] = [
       "datagov_get_resource",
     ],
     notes: [
-      "Deprecated. Upstream CKAN /api/3/action endpoints no longer exist.",
-      "All tools intentionally return a clear upstream-unavailable error.",
-      "Hidden from belgium_list_domains by default. Pass includeDeprecated=true to inspect it.",
-      "Scheduled for removal in a future major release.",
+      "data.gov.be retired its CKAN API; the catalogue is read from data.europa.eu, which harvests it.",
+      "Use the publisher name exactly as returned by datagov_list_organizations for the organization filter.",
     ],
   },
   {

@@ -75,7 +75,7 @@ describe("mcp-belgium deprecation handling", () => {
 
     expect(payload.includeDeprecated).toBe(false);
     const ids = payload.domains.map((d) => d.id);
-    expect(ids).not.toContain("data-gov-be");
+    expect(ids).toContain("data-gov-be");
     expect(ids).not.toContain("flanders");
     expect(payload.domains.every((d) => d.status !== "deprecated")).toBe(true);
   });
@@ -96,7 +96,8 @@ describe("mcp-belgium deprecation handling", () => {
 
     expect(payload.includeDeprecated).toBe(true);
     const deprecated = payload.domains.filter((d) => d.status === "deprecated").map((d) => d.id);
-    expect(deprecated).toEqual(expect.arrayContaining(["data-gov-be", "flanders"]));
+    expect(deprecated).toEqual(expect.arrayContaining(["flanders"]));
+    expect(deprecated).not.toContain("data-gov-be");
   });
 
   it("reports deprecated domains in the catalog overview status buckets", async () => {
@@ -109,7 +110,7 @@ describe("mcp-belgium deprecation handling", () => {
     };
 
     expect(parsed.domainsByStatus.deprecated).toEqual(
-      expect.arrayContaining(["data-gov-be", "flanders"])
+      expect.arrayContaining(["flanders"])
     );
   });
 
@@ -152,6 +153,5 @@ describe("mcp-belgium deprecation handling", () => {
     // domain, the suggestions list must not point users toward a retired API.
     const suggestionsBlock = promptText.split("Recommended domains and tools:")[1] ?? "";
     expect(suggestionsBlock).not.toMatch(/^- flanders: /m);
-    expect(suggestionsBlock).not.toMatch(/^- data-gov-be: /m);
   });
 });
