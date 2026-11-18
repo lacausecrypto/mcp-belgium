@@ -1,3 +1,5 @@
+import { UpstreamApiError } from "./errors.js";
+
 export interface RetryOptions {
   maxRetries: number;
   baseDelayMs: number;
@@ -10,6 +12,14 @@ const DEFAULT_RETRY: RetryOptions = {
   maxDelayMs: 5000,
 };
 
+/** Client errors are deterministic: only network failures, timeouts, 408, 429 and 5xx are retried. */
+export function isRetryable(err: unknown): boolean {
+  if (err instanceof UpstreamApiError) {
+    return err.statusCode >= 500 || err.statusCode === 408 || err.statusCode === 429;
+  }
+  return true;
+}
+
 export async function withRetry<T>(
   fn: () => Promise<T>,
   opts: Partial<RetryOptions> = {}
@@ -20,7 +30,7 @@ export async function withRetry<T>(
     try {
       return await fn();
     } catch (err) {
-      if (attempt === maxRetries) throw err;
+      if (attempt === maxRetries || !isRetryable(err)) throw err;
       const delay = Math.min(baseDelayMs * 2 ** attempt + Math.random() * 100, maxDelayMs);
       await new Promise((r) => setTimeout(r, delay));
     }
