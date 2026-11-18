@@ -14,15 +14,15 @@
 - `geoservices-wallonia`: ArcGIS REST discovery and layer queries
 - `urban-brussels`: WFS feature types and GeoJSON retrieval
 - `urbis`: public WMS layer discovery and GetMap URL building
+- `data-gov-be`: data.gov.be catalogue search through its data.europa.eu mirror
 
 ## Key-gated domains
 
 - `stib`: requires `STIB_API_KEY`
-- `kbo`: requires `CBEAPI_KEY`
+- `kbo`: requires `CBEAPI_KEY` (free tier at https://cbeapi.be), set in the client config `env` block
 
 ## Compatibility layers
 
-- `data-gov-be`: older federal CKAN contract preserved, but upstream contract changed
 - `flanders`: older CKAN-like contract preserved, but current upstream requires an API key
 
 ## Discovery tools

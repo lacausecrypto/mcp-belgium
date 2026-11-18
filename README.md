@@ -68,7 +68,17 @@ Default transport is `stdio`, which is what desktop MCP clients expect.
 Optional env vars:
 
 - `STIB_API_KEY`: enables live STIB/MIVB tools
-- `CBEAPI_KEY`: enables live KBO/BCE company registry tools
+- `CBEAPI_KEY`: enables live KBO/BCE company registry tools (free key, 2,500 calls/day, at https://cbeapi.be)
+
+API keys go in the `env` block of the server entry, next to `LOG_LEVEL`:
+
+```json
+"env": {
+  "LOG_LEVEL": "silent",
+  "CBEAPI_KEY": "<your cbeapi key>",
+  "STIB_API_KEY": "<your stib key>"
+}
+```
 - `MCP_TRANSPORT=http`: runs the server over Streamable HTTP
 - `PORT_BELGIUM=3017`: sets the HTTP port for the aggregated server
 
@@ -99,17 +109,17 @@ That means the LLM can:
 | `mobility_*` | Belgian mobility / SMOP | Live | None | intermodal trip planning, operators, GTFS references |
 | `stib_*` | STIB/MIVB Brussels transit | Live | API key | waiting times, stops, routes, service messages |
 | `infrabel_*` | Infrabel Open Data | Live | None | rail infrastructure datasets and records |
-| `kbo_*` | Belgian company registry | Live | API key | enterprise search and company details |
+| `kbo_*` | Belgian company registry | Live | API key | enterprise search, company details, companies by NACE code |
 | `best_*` | BeST Belgian addresses | Live | None | addresses, municipalities, streets, postal infos |
 | `statbel_*` | Statbel | Live | None | population, CPI, employment, dataset search |
 | `airquality_*` | IRCELINE air quality | Live | None | stations, live measurements, BelAQI, timeseries |
+| `datagov_*` | data.gov.be catalogue (via data.europa.eu) | Live | None | dataset search, metadata, publishers, download links |
 | `brussels_*` | Brussels Region open data | Live | None | datasets and records |
 | `wallonia_*` | Wallonia open data | Live | None | datasets and records |
 | `kmi_*` | KMI / IRM GeoServer | Live | None | stations, hourly observations, WFS discovery |
 | `wallonia_geo_*` | Wallonia GeoServices | Live | None | ArcGIS folders, services, layer queries |
 | `urban_*` | urban.brussels WFS | Live | None | feature types, schemas, GeoJSON features |
 | `urbis_*` | URBIS public WMS | Live | None | WMS layer discovery and map URL generation |
-| `datagov_*` | data.gov.be compatibility layer | Limited | None | explicit upstream-changed error surface |
 | `flanders_*` | Datavindplaats compatibility layer | Limited | API key | explicit upstream limitation surface |
 
 ## Docs / Wiki
@@ -173,7 +183,7 @@ Current examples:
 
 - `mcp-stib` requires `STIB_API_KEY`
 - `mcp-kbo` requires `CBEAPI_KEY`
-- `mcp-data-gov-be` preserves the old tool contract but returns an explicit upstream-changed error
+- `mcp-data-gov-be` reads the data.gov.be catalogue from its official data.europa.eu mirror, since data.gov.be retired its CKAN API
 - `mcp-opendata-flanders` preserves the old tool contract but returns an explicit API-key limitation
 
 ## Validation
