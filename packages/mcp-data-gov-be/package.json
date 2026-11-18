@@ -2,7 +2,7 @@
   "name": "@lacausecrypto/data-gov-be",
   "private": true,
   "version": "0.1.0",
-  "description": "MCP server exposing Belgium federal CKAN open data APIs",
+  "description": "MCP server for the data.gov.be open data catalogue (via the data.europa.eu mirror)",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -29,15 +29,15 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@lacausecrypto/core": "workspace:*",
-    "express": "^5.1.0",
-    "zod": "^3.25.0"
+    "express": "^5.2.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "@types/node": "^22.12.0",
+    "typescript": "~6.0.3",
+    "@types/node": "^22.20.5",
     "@types/express": "^5.0.0",
-    "vitest": "^3.1.0"
+    "vitest": "^5.1.1"
   }
 }
