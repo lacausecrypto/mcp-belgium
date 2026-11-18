@@ -79,7 +79,7 @@
     "@lacausecrypto/urbis": "workspace:*",
     "@types/express": "^5.0.0",
     "@types/node": "^22.20.5",
-    "tsup": "^8.5.0",
+    "tsup": "^9.0.0",
     "typescript": "~6.0.3",
     "vitest": "^5.1.1"
   }
