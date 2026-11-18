@@ -5,8 +5,19 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    groups:
+      # One PR for all non-breaking bumps; majors still get their own PR.
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+    ignore:
+      # Types must match the supported runtime (engines.node >= 22).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    groups:
+      actions:
+        patterns: ["*"]
