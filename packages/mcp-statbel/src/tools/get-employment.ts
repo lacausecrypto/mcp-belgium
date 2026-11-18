@@ -6,13 +6,14 @@ import { statbelClient } from "../client.js";
 export function registerGetEmploymentTool(server: McpServer): void {
   server.tool(
     "statbel_get_employment",
-    "Get Belgian employment statistics from Statbel.",
+    "Get yearly employment, unemployment and activity rates (ages 15-64) by gender for Belgium and its regions (Statbel Labour Force Survey).",
     {
-      year: z.number().optional().describe("Year"),
+      year: z.number().int().optional().describe("Year"),
+      region: z.string().optional().describe("Belgium, Brussels, Flanders or Wallonia (FR/NL names accepted)"),
     },
-    async ({ year }) => {
+    async ({ year, region }) => {
       try {
-        return jsonResult(await statbelClient.getEmployment(year));
+        return jsonResult(await statbelClient.getEmployment(year, region));
       } catch (e) {
         return errorResult(`Employment lookup failed: ${e instanceof Error ? e.message : String(e)}`);
       }
