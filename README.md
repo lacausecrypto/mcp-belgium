@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/github/license/lacausecrypto/mcp-belgium?style=flat)](./LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D22-43853d?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9.15.4-F69220?style=flat&logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![typescript](https://img.shields.io/badge/TypeScript-5.7.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![typescript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![mcp](https://img.shields.io/badge/MCP-stdio%20%2B%20Streamable%20HTTP-111827?style=flat)](https://modelcontextprotocol.io/)
 
 One MCP server for Belgian public APIs.
@@ -21,7 +21,7 @@ The package is also prepared for publication to the official MCP Registry under 
 - one MCP server entry in your client config
 - namespaced tools like `irail_*`, `statbel_*`, `best_*`, `kmi_*`, `urban_*`, and `urbis_*`
 - built-in catalog tools, resources, and a prompt so the LLM can discover the right Belgian domain before calling tools
-- explicit limitation surfaces when an upstream requires a key or has changed contract
+- explicit, actionable errors when an upstream requires a key or has changed contract (no silent empty results)
 
 ## Install
 
@@ -65,12 +65,7 @@ Default transport is `stdio`, which is what desktop MCP clients expect.
 }
 ```
 
-Optional env vars:
-
-- `STIB_API_KEY`: enables live STIB/MIVB tools
-- `CBEAPI_KEY`: enables live KBO/BCE company registry tools (free key, 2,500 calls/day, at https://cbeapi.be)
-
-API keys go in the `env` block of the server entry, next to `LOG_LEVEL`:
+Most domains need no key. Two are key-gated, and their keys go in the same `env` block:
 
 ```json
 "env": {
@@ -79,8 +74,15 @@ API keys go in the `env` block of the server entry, next to `LOG_LEVEL`:
   "STIB_API_KEY": "<your stib key>"
 }
 ```
-- `MCP_TRANSPORT=http`: runs the server over Streamable HTTP
-- `PORT_BELGIUM=3017`: sets the HTTP port for the aggregated server
+
+| Variable | Enables | Where to get it |
+| --- | --- | --- |
+| `CBEAPI_KEY` | `kbo_*` company registry tools | free tier (2,500 calls/day) at https://cbeapi.be |
+| `STIB_API_KEY` | `stib_*` Brussels transit tools | free key at https://data.stib-mivb.brussels |
+| `MCP_TRANSPORT=http` | Streamable HTTP instead of stdio | — |
+| `PORT_BELGIUM` | HTTP port of the aggregated server (default `3017`) | — |
+
+Restart your MCP client after editing its config.
 
 ## What the LLM gets
 
@@ -106,21 +108,23 @@ That means the LLM can:
 | Prefix | Domain | Status | Auth | Main data |
 | --- | --- | --- | --- | --- |
 | `irail_*` | Belgian rail / iRail | Live | None | stations, connections, liveboards, vehicles, disruptions |
-| `mobility_*` | Belgian mobility / SMOP | Live | None | intermodal trip planning, operators, GTFS references |
+| `mobility_*` | Trip planning via Transitous | Live | None | door-to-door trips across SNCB, STIB, De Lijn and TEC; operators, GTFS references |
 | `stib_*` | STIB/MIVB Brussels transit | Live | API key | waiting times, stops, routes, service messages |
 | `infrabel_*` | Infrabel Open Data | Live | None | rail infrastructure datasets and records |
 | `kbo_*` | Belgian company registry | Live | API key | enterprise search, company details, companies by NACE code |
 | `best_*` | BeST Belgian addresses | Live | None | addresses, municipalities, streets, postal infos |
-| `statbel_*` | Statbel | Live | None | population, CPI, employment, dataset search |
-| `airquality_*` | IRCELINE air quality | Live | None | stations, live measurements, BelAQI, timeseries |
+| `statbel_*` | Statbel | Live | None | population, CPI, employment by year and region; search and read any Be.STAT view |
+| `airquality_*` | IRCELINE air quality | Live | None | nearest stations, live measurements, BelAQI at any point, timeseries |
 | `datagov_*` | data.gov.be catalogue (via data.europa.eu) | Live | None | dataset search, metadata, publishers, download links |
 | `brussels_*` | Brussels Region open data | Live | None | datasets and records |
 | `wallonia_*` | Wallonia open data | Live | None | datasets and records |
 | `kmi_*` | KMI / IRM GeoServer | Live | None | stations, hourly observations, WFS discovery |
 | `wallonia_geo_*` | Wallonia GeoServices | Live | None | ArcGIS folders, services, layer queries |
-| `urban_*` | urban.brussels WFS | Live | None | feature types, schemas, GeoJSON features |
+| `urban_*` | urban.brussels WFS | Live | None | feature types, schemas, GeoJSON features, the 19 commune boundaries |
 | `urbis_*` | URBIS public WMS | Live | None | WMS layer discovery and map URL generation |
-| `flanders_*` | Datavindplaats compatibility layer | Limited | API key | explicit upstream limitation surface |
+| `flanders_*` | Datavindplaats compatibility layer | Deprecated | API key | explicit upstream limitation error |
+
+For a sector or company question, `kbo_search_by_activity` lists companies by NACE code; for any other Belgian open dataset, start with `datagov_search_datasets`, which covers federal, regional and local publishers.
 
 ## Docs / Wiki
 
@@ -181,15 +185,19 @@ This project wraps public upstream APIs. Some Belgian portals change authenticat
 
 Current examples:
 
-- `mcp-stib` requires `STIB_API_KEY`
-- `mcp-kbo` requires `CBEAPI_KEY`
-- `mcp-data-gov-be` reads the data.gov.be catalogue from its official data.europa.eu mirror, since data.gov.be retired its CKAN API
-- `mcp-opendata-flanders` preserves the old tool contract but returns an explicit API-key limitation
+- `stib_*` requires `STIB_API_KEY`, `kbo_*` requires `CBEAPI_KEY`
+- `datagov_*` reads the data.gov.be catalogue from its official data.europa.eu mirror, since data.gov.be retired its CKAN API
+- `mobility_plan_trip` routes through [Transitous](https://transitous.org), a community-run open-source service: keep request volume reasonable
+- `wallonia_*` record queries share the anonymous ODS quota of the Wallonia portal (10,000 calls/day) and can return HTTP 429 when it is exhausted
+- `flanders_*` preserves the old tool contract but returns an explicit API-key limitation
+
+See [CHANGELOG.md](./CHANGELOG.md) for upstream changes handled in each release.
 
 ## Validation
 
-Current workspace checks:
+Current workspace checks (the same steps run in CI):
 
+- `pnpm run lint`
 - `pnpm run build`
 - `pnpm run test`
 - `pnpm run typecheck`

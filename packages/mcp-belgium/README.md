@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/github/license/lacausecrypto/mcp-belgium?style=flat)](https://github.com/lacausecrypto/mcp-belgium/blob/main/LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D22-43853d?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9.15.4-F69220?style=flat&logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![typescript](https://img.shields.io/badge/TypeScript-5.7.x-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![typescript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![mcp](https://img.shields.io/badge/MCP-stdio%20%2B%20Streamable%20HTTP-111827?style=flat)](https://modelcontextprotocol.io/)
 
 Single MCP server for Belgian public APIs.
@@ -46,7 +46,19 @@ pnpm dlx mcp-belgium
 }
 ```
 
+## API keys
+
+Most tools need no key. Two domains are key-gated; add the keys to the `env` block above and restart the client:
+
+- `CBEAPI_KEY`: `kbo_*` company registry tools, free tier (2,500 calls/day) at https://cbeapi.be
+- `STIB_API_KEY`: `stib_*` Brussels transit tools, free key at https://data.stib-mivb.brussels
+
+## What's inside
+
+64 namespaced tools across iRail, trip planning (Transitous), STIB, Infrabel, KBO/BCE, BeST addresses, Statbel, IRCELINE air quality, data.gov.be, Brussels and Wallonia open data, KMI/IRM, Wallonia GeoServices, urban.brussels and URBIS, plus catalog tools (`belgium_list_domains`, `belgium_describe_domain`) so the model picks the right domain.
+
 ## Docs
 
 - GitHub: [lacausecrypto/mcp-belgium](https://github.com/lacausecrypto/mcp-belgium)
 - Docs index: [docs/Home.md](https://github.com/lacausecrypto/mcp-belgium/blob/main/docs/Home.md)
+- Changelog: [CHANGELOG.md](https://github.com/lacausecrypto/mcp-belgium/blob/main/CHANGELOG.md)

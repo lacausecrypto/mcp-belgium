@@ -2,6 +2,7 @@ import { createRequire } from "node:module";
 import { defineConfig } from "tsup";
 
 const require = createRequire(import.meta.url);
+const packageVersion = (require("./package.json") as { version: string }).version;
 const typescriptVersion = require("typescript/package.json").version as string;
 const typescriptMajor = Number.parseInt(typescriptVersion.split(".")[0] ?? "0", 10);
 const dtsCompilerOptions = typescriptMajor >= 6 ? { ignoreDeprecations: "6.0" } : undefined;
@@ -17,6 +18,7 @@ export default defineConfig({
   clean: true,
   dts: dtsCompilerOptions ? { compilerOptions: dtsCompilerOptions } : true,
   shims: false,
+  define: { __PACKAGE_VERSION__: JSON.stringify(packageVersion) },
   noExternal: [/^@lacausecrypto\//],
   external: ["@modelcontextprotocol/sdk", "express", "pino", "pino-pretty", "zod"],
 });
