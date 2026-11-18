@@ -7,6 +7,9 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { createLogger, getPort } from "@lacausecrypto/core";
 import { registerAll } from "./register.js";
 
+/** Replaced at build time by tsup with the package.json version. */
+declare const __PACKAGE_VERSION__: string;
+
 const logger = createLogger("mcp-belgium");
 const transport = process.env.MCP_TRANSPORT ?? "stdio";
 
@@ -14,7 +17,7 @@ function createServer(): McpServer {
   const server = new McpServer(
     {
       name: "mcp-belgium",
-      version: "0.1.0",
+      version: __PACKAGE_VERSION__,
     },
     {
       capabilities: {
